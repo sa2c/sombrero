@@ -1,0 +1,280 @@
+###############################################################################
+# Copyright (c) 2008,2014, Claudio Pica                                       #   
+# All rights reserved.                                                        #
+###############################################################################
+
+
+SHELL = /bin/bash
+
+MACRO += -DBC_T_PERIODIC
+MACRO += -DBC_X_PERIODIC
+MACRO += -DBC_Y_PERIODIC
+MACRO += -DBC_Z_PERIODIC
+
+MACRO += -DUPDATE_EO
+MACRO += -DWITH_MPI
+MACRO += -DIO_FLUSH
+MACRO += -DWITH_CLOVER
+
+include $(MKDIR)/MkFlags
+
+MAKEFLAGS += -s
+MAKEFLAGS += -r
+#NO_COLOR_OUT = 1
+
+SRCS += $(patsubst %,%.c,$(EXES))
+#OBJS = $($(filter-out $(EXCLUDE),$(SRCS)):.c=.o)
+OBJS = $(patsubst %.c,%.o,$(filter-out $(EXCLUDE),$(SRCS)))
+ALIBNAME = $(abspath $(LIBNAME))
+
+#Colorization
+ifneq ($(NO_COLOR_OUT),1)
+
+_esc := 
+_col_black :=       $(_esc)[30m
+_col_red :=         $(_esc)[31m
+_col_green :=       $(_esc)[32m
+_col_yellow :=      $(_esc)[33m
+_col_blue :=        $(_esc)[34m
+_col_magenta :=     $(_esc)[35m
+_col_cyan :=        $(_esc)[36m
+_col_ltgray :=      $(_esc)[37m
+_col_norm :=        $(_esc)[0m
+_col_background :=  $(_esc)[07m
+_col_underline :=   $(_esc)[04m
+_col_blink :=       $(_esc)[05m
+_col_noblink :=     $(_esc)[25m
+_col_bold :=        $(_esc)[1m
+
+#Color Theme
+_col_clean := $(_col_bold)$(_col_blue)
+_col_deps := $(_col_bold)$(_col_blue)
+_col_comp := $(_col_bold)$(_col_blue)
+_col_link := $(_col_background)$(_col_bold)$(_col_blue)
+_col_write := $(_col_bold)$(_col_blue)
+_col_fname := $(_col_bold)
+_col_done := $(_col_green)
+_col_failed := $(_col_bold)$(_col_blink)$(_col_red)
+
+endif
+
+_rname = $(subst $(abspath $(TOPDIR)),%,$(abspath $(1)))
+_testdir = $(subst $(CURDIR)/,,$(dir $(abspath $(1))))
+_cfname = [$(_col_fname)$(1)$(_col_norm)]
+_cfailed := $(_col_failed)failed$(_col_norm)
+_cdone := $(_col_done)done$(_col_norm)
+
+CDIR = $(call _rname, $(CURDIR))
+LNAME = $(call _rname, $(ALIBNAME))
+
+#Macros
+WQUAT = $(if $(findstring -DWITH_QUATERNIONS,$(MACRO)),1,0)
+
+#Include
+INCDIR = $(TOPDIR)/Include
+INC = -I $(INCDIR)
+
+GCC = gcc
+CXX ?= g++
+CPPFLAGS += $(MACRO)
+CPPFLAGS += $(INC)
+
+
+_MkRules_default_target: $(EXES) $(OBJS) $(ALIBNAME)
+
+_objs: $(OBJS)
+
+.%.d: SRC=$(patsubst %.d,%.c,$@)
+.%.d: %.c
+	if test "$(call _testdir, $@)" = ""; then \
+	  echo "$(_col_deps)Dependences$(_col_norm) for $(call _cfname,$(call _rname,$(SRC)))..." ;\
+	  ($(GCC) -MM -MG -MT "$@ $(patsubst .%.d,%.o,$@)" $(CPPFLAGS) $(SRC) > $@ &&\
+	  MAKEFILES="$@" $(MAKE) $@ ;\
+	else \
+	  $(MAKE) -C $(dir $@) $(notdir $@) ;\
+	fi
+
+
+su2/%: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SUN -DNG=2
+su2adj/%: CPPFLAGS += -DREPR_ADJOINT -DREPR_NAME=\"REPR_ADJOINT\" -DGAUGE_SUN -DNG=2
+su3/%: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SUN -DNG=3
+su3sym/%: CPPFLAGS += -DREPR_SYMMETRIC -DREPR_NAME=\"REPR_SYMMETRIC\" -DGAUGE_SUN -DNG=3
+sp4/%: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SPN -DNG=4
+sp4adj/%: CPPFLAGS += -DREPR_ADJOINT -DREPR_NAME=\"REPR_ADJOINT\" -DGAUGE_SPN -DNG=4
+
+
+su2/%.d su2adj/%.d su3/%.d su3sym/%.d sp4/%.d sp4adj/%.d: %.c
+	mkdir -p $(dir $@)
+	echo "$(_col_deps)Dependences$(_col_norm) $(call _cfname,$@)..." ;\
+	$(GCC) -MM -MG -MT "$@ $(patsubst .%.d,%.o,$@)" $(CPPFLAGS) $< > $@ 
+
+
+DFILES = $(findstring .d,$(MAKEFILES))
+RBLD = $(if $(DFILES),,rebuild)
+
+%.h:
+	echo "$(_col_bold)$(_col_blink)$(_col_red)Missing header: $(_col_noblink)$@$(_col_norm)"
+	false
+
+
+sombrero/sombrero1: sombrero/su2/sombrero.o sombrero/su2/hmc_utils.o $(TOPDIR)/LibHR/libhr_su2.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2 -lm ;\
+
+sombrero/sombrero2: sombrero/su2adj/sombrero.o sombrero/su2adj/hmc_utils.o $(TOPDIR)/LibHR/libhr_su2adj.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2adj -lm ;\
+
+sombrero/sombrero3: sombrero/su3/sombrero.o sombrero/su3/hmc_utils.o $(TOPDIR)/LibHR/libhr_su3.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3 -lm ;\
+
+sombrero/sombrero4: sombrero/sp4/sombrero.o sombrero/sp4/hmc_utils.o $(TOPDIR)/LibHR/libhr_sp4.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4 -lm ;\
+
+sombrero/sombrero5: sombrero/su3sym/sombrero.o sombrero/su3sym/hmc_utils.o $(TOPDIR)/LibHR/libhr_su3sym.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3sym -lm ;\
+
+sombrero/sombrero6: sombrero/sp4adj/sombrero.o sombrero/sp4adj/hmc_utils.o $(TOPDIR)/LibHR/libhr_sp4adj.a
+	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
+	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4adj -lm ;\
+
+
+
+sombrero/su2/%.o    sombrero/su2adj/%.o sombrero/su3/%.o   : SRC=$(patsubst %.o,%.c,$@)
+sombrero/su3sym/%.o sombrero/sp4/%.o    sombrero/sp4adj/%.o: SRC=$(patsubst %.o,%.c,$@)
+sombrero/su2/%.o    sombrero/su2adj/%.o sombrero/su3/%.o   : DEP=$(patsubst %.o,%.d,$@)
+sombrero/su3sym/%.o sombrero/sp4/%.o    sombrero/sp4adj/%.o: DEP=$(patsubst %.o,%.d,$@)
+
+sombrero/su2/%.o: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SUN -DNG=2
+sombrero/su2adj/%.o: CPPFLAGS += -DREPR_ADJOINT -DREPR_NAME=\"REPR_ADJOINT\" -DGAUGE_SUN -DNG=2
+sombrero/su3/%.o: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SUN -DNG=3
+sombrero/su3sym/%.o: CPPFLAGS += -DREPR_SYMMETRIC -DREPR_NAME=\"REPR_SYMMETRIC\" -DGAUGE_SUN -DNG=3
+sombrero/sp4/%.o: CPPFLAGS += -DREPR_FUNDAMENTAL -DREPR_NAME=\"REPR_FUNDAMENTAL\" -DGAUGE_SPN -DNG=4
+sombrero/sp4adj/%.o: CPPFLAGS += -DREPR_ADJOINT -DREPR_NAME=\"REPR_ADJOINT\" -DGAUGE_SPN -DNG=4
+
+sombrero/su2/%.o sombrero/su2adj/%.o sombrero/su3/%.o sombrero/su3sym/%.o\
+sombrero/sp4/%.o sombrero/sp4adj/%.o : sombrero/%.c $(RBLD)
+	if test "$(DFILES)" = ""; then \
+		mkdir -p $(dir $@) ;\
+		$(MAKE) -C sombrero $(subst sombrero/,,$(DEP)) &&\
+		MAKEFILES="$(DEP)" $(MAKE) $@ ;\
+	else \
+		echo "$(_col_deps)Compiling$(_col_norm) $(call _cfname,$(call _rname,$(SRC)))..." ;\
+		mkdir -p $(dir $@) ;\
+		$(CC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
+	fi ;\
+	
+
+
+su2/%.o    su2adj/%.o su3/%.o   : SRC=$(patsubst %.o,%.c,$@)
+su3sym/%.o sp4/%.o    sp4adj/%.o: SRC=$(patsubst %.o,%.c,$@)
+su2/%.o    su2adj/%.o su3/%.o   : DEP=$(patsubst %.o,%.d,$@)
+su3sym/%.o sp4/%.o    sp4adj/%.o: DEP=$(patsubst %.o,%.d,$@)
+su2/%.o su2adj/%.o su3/%.o su3sym/%.o sp4/%.o\
+sp4adj/%.o: %.c $(MKDIR)/MkFlags $(RBLD)
+	if test "$(DFILES)" = ""; then \
+		mkdir -p $(dir $@) &&\
+		$(MAKE) $(DEP) &&\
+		MAKEFILES="$(DEP)" $(MAKE) $@ ;\
+	else \
+		echo "$(_col_deps)Compiling$(_col_norm) $(call _cfname,$(call _rname,$(SRC)))..." ;\
+		$(CC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
+	fi ;\
+
+
+
+LIBCFILES := $(if $(LIBDIRS),$(shell find $(LIBDIRS) -name *.c),)
+LIBOBJS := $(addsuffix .o,$(basename $(LIBCFILES)))
+
+LIBCFILES := $(if $(SHARED_LIBDIRS),$(shell find $(SHARED_LIBDIRS) -name *.c),)
+SHARED_LIBOBJS := $(addsuffix .o,$(basename $(LIBCFILES)))
+
+
+LibHR/libhr_%.a: rebuild
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+libhr_su2.a: $(patsubst %,su2/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+libhr_su2adj.a:  $(patsubst %,su2adj/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+libhr_su3.a:  $(patsubst %,su3/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+libhr_su3sym.a:  $(patsubst %,su3sym/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+libhr_sp4.a:  $(patsubst %,sp4/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+libhr_sp4adj.a:  $(patsubst %,sp4adj/%,$(LIBOBJS)) $(SHARED_LIBOBJS)
+
+libhr_su2.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,su2/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+libhr_su2adj.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,su2adj/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+libhr_su3.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,su3/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+libhr_su3sym.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,su3sym/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+libhr_sp4.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,sp4/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+libhr_sp4adj.a:
+	echo "$(_col_link)Creating library$(_col_norm) $(call _cfname,$@)..." ;\
+	ar -rcs $@ $(patsubst %,sp4adj/%,$(LIBOBJS)) $(SHARED_LIBOBJS)  2>/dev/null
+
+#avoid the use of implicit suffix rules!
+.SUFFIXES:
+
+#remove files whose rules generate errors
+.DELETE_ON_ERROR:
+
+.PHONY: rebuild clean _objs $(patsubst %,clean-%,$(SUBDIRS)) cleanall _MkRules_default_target default
+
+$(patsubst %,clean-%,$(SUBDIRS)):
+	$(MAKE) -C $(patsubst clean-%,%,$@) clean
+
+clean-libsu2:
+	rm -r libsu2
+
+clean-libsu2adj:
+	rm -r libsu2adj
+
+clean-libsu3:
+	rm -r libsu3
+
+clean-libsu3sym:
+	rm -r libsu3sym
+
+clean-libsp4:
+	rm -r libsp4
+
+clean-libsp4adj:
+	rm -r libsp4adj
+
+clean:: $(patsubst %,clean-%,$(SUBDIRS))
+	echo "$(_col_clean)Cleaning$(_col_norm) $(call _cfname,$(CDIR))..."
+	rm -f *.o *.rpo *~ *.il *.dyn *.ii *.s .*.d *.a cinfo.c
+	if test "$(EXES)" != "" -a "$(CEXE)" != "" ; then \
+	  echo "$(_col_clean)Removing EXEs$(_col_norm) in $(call _cfname,$(CDIR))..." ;\
+	  rm -f $(EXES) ;\
+	fi
+
+cleanall::
+	CEXE="all" $(MAKE) clean
+
+cinfo.c: $(MKDIR)/MkFlags $(MKDIR)/MkRules $(MKDIR)/Utils/cinfo.sh
+	$(MKDIR)/Utils/cinfo.sh $(MKDIR) $(TOPDIR) $(MACRO)
+
+LDFLAGS += $(foreach _lib, $(LIBS),-L$(dir $(_lib)))
+LDFLAGS += $(foreach _lib, $(LIBS),-l$(patsubst lib%.a,%,$(notdir $(_lib))))
+LDFLAGS += -lm
+
+
+
+$(foreach prog,$(EXES),$(eval $(call LINK_template,$(prog))))
+

@@ -1,0 +1,4 @@
+#Compiler
+CC = mpicc
+CFLAGS = -std=c99 -g -O3
+LDFLAGS =

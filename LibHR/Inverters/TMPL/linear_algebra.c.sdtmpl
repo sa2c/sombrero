@@ -1,0 +1,127 @@
+/***************************************************************************\
+* Copyright (c) 2008, Claudio Pica and Agostino Patella                     *   
+* All rights reserved.                                                      * 
+\***************************************************************************/
+
+#include "communications.h"
+
+/* Re <s1,s2> 
+ * flop count = 16*NF*VOL
+ */
+double _FUNC(spinor_field_prod_re)(_SPINOR_FIELD_TYPE *s1, _SPINOR_FIELD_TYPE *s2)
+{
+	double res=0.;
+
+	_TWO_SPINORS_FOR_SUM(s1,s2,res) {
+    _REAL prod;
+		_spinor_prod_re_f(prod,*_SPINOR_PTR(s1),*_SPINOR_PTR(s2));
+		res+=(double)prod;
+	}
+#ifdef WITH_MPI
+	global_sum(&res,1);
+#endif
+	return res;
+}
+
+/* Re <s1,s1> 
+ * flop count = 16*NF*VOL
+ */
+double _FUNC(spinor_field_sqnorm)(_SPINOR_FIELD_TYPE *s1)
+{
+   double res=0.;
+
+   _ONE_SPINOR_FOR_SUM(s1,res) {
+     _REAL prod;
+		 _spinor_prod_re_f(prod,*_SPINOR_PTR(s1),*_SPINOR_PTR(s1));
+     res+=(double)prod;
+   }
+#ifdef WITH_MPI
+	global_sum(&res,1);
+#endif
+   return res;
+}
+
+/* s1+=r*s2 r real
+ * flop count = 8*VOL*NF
+ */
+void _FUNC(spinor_field_mul_add_assign)(_SPINOR_FIELD_TYPE *s1, _REAL r, _SPINOR_FIELD_TYPE *s2)
+{
+  //_REAL rr=r;
+  
+   _TWO_SPINORS_FOR(s1,s2) {
+      _spinor_mul_add_assign_f(*_SPINOR_PTR(s1),r,*_SPINOR_PTR(s2));
+   }
+}
+
+/* s1+=c*g5*s2 c complex */
+void _FUNC(spinor_field_g5_mulc_add_assign)(_SPINOR_FIELD_TYPE *s1, _COMPLEX c, _SPINOR_FIELD_TYPE *s2)
+{
+   //_COMPLEX c1=c;
+   //c1.re=(_REAL)c.re; c1.im=(_REAL)c.im;
+  _SPINOR_TYPE tmp;
+   _TWO_SPINORS_FOR(s1,s2) {
+     _spinor_g5_f(tmp,*_SPINOR_PTR(s2));
+     _spinor_mulc_add_assign_f(*_SPINOR_PTR(s1),c,tmp);
+   }
+}
+
+/* s1=r*s2 
+ * flop count = 8*VOL*NF
+ */
+void _FUNC(spinor_field_mul)(_SPINOR_FIELD_TYPE *s1, _REAL r, _SPINOR_FIELD_TYPE *s2)
+{
+  //_REAL rr=(_REAL)r;
+  
+   _TWO_SPINORS_FOR(s1,s2) {
+      _spinor_mul_f(*_SPINOR_PTR(s1),r,*_SPINOR_PTR(s2));
+   }
+}
+
+/* r=s1-s2 
+ * flop count = 8*VOL*NF
+ */
+void _FUNC(spinor_field_sub)(_SPINOR_FIELD_TYPE *r, _SPINOR_FIELD_TYPE *s1, _SPINOR_FIELD_TYPE *s2)
+{
+  
+   _THREE_SPINORS_FOR(s1,s2,r) {
+      _spinor_sub_f(*_SPINOR_PTR(r),*_SPINOR_PTR(s1),*_SPINOR_PTR(s2));
+   }
+}
+
+/* s1+=s2
+ * flop count = 8*NF*VOL
+ */
+void _FUNC(spinor_field_add_assign)(_SPINOR_FIELD_TYPE *s1, _SPINOR_FIELD_TYPE *s2)
+{
+  
+   _TWO_SPINORS_FOR(s1,s2) {
+      _spinor_add_assign_f(*_SPINOR_PTR(s1),*_SPINOR_PTR(s2));
+   }
+}
+
+
+/* s1=0 */
+void _FUNC(spinor_field_zero)(_SPINOR_FIELD_TYPE *s1)
+{
+   _ONE_SPINOR_FOR(s1) {
+      _spinor_zero_f(*_SPINOR_PTR(s1));
+  }
+}
+
+/* s1=-s2 */
+void _FUNC(spinor_field_minus)(_SPINOR_FIELD_TYPE *s1, _SPINOR_FIELD_TYPE *s2)
+{
+  
+   _TWO_SPINORS_FOR(s1,s2) {
+      _spinor_minus_f(*_SPINOR_PTR(s1),*_SPINOR_PTR(s2));
+   }
+}
+
+
+/* s1=g5*s1  */
+void _FUNC(spinor_field_g5_assign)(_SPINOR_FIELD_TYPE *s1)
+{
+   _ONE_SPINOR_FOR(s1) {
+     _spinor_g5_assign_f(*_SPINOR_PTR(s1));
+   }
+}

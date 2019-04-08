@@ -1,0 +1,6 @@
+#Include this file at the end of MkFlags
+
+#Compiler
+CC =  mpcc_r
+
+CFLAGS = -q64 -O4 -qarch=pwr5 -qtune=pwr5 -qstrict
