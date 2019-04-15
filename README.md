@@ -11,7 +11,7 @@ A benchmarking utility for high performance computing based on lattice field the
   1. Clone the repository
 
 ```
-git clone git@sa2c-gitlab.swansea.ac.uk:j.m.o.rantaharju/sombrero.git
+git clone https://github.com/sa2c/sombrero.git
 cd sombrero
 ```
 
