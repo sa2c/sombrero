@@ -101,6 +101,7 @@ static void split_lattice( int np[4] ){
       d=0;
     } else {
       d = d+1;
+      f = f+1;
       if( d > 3 ){
         char message[200];
         sprintf(message, " Lattice volume cannot be divided across given number of nodes.\n");
