@@ -12,7 +12,7 @@ trap finish EXIT
 
 # Print usage and quit
 function usage {
-    echo "./sombrero.sh -n <num-cores>  [ -w ] [ -s small | medium | large | very_large ]" >&2
+    echo "./sombrero.sh { -n <num-cores> | -H <hostfile> }  [ -w ] [ -s small | medium | large | very_large ]" >&2
     exit 1
 }
 
@@ -29,12 +29,17 @@ function safe_run {
 #### main
 # check arguments 
 shopt -s extglob
-while getopts 'n:s:whl:p:' opt ; do
+while getopts 'n:H:s:whl:p:' opt ; do
     case "$opt" in
         n)
             case "$OPTARG" in
                 (+([0-9])) nodes="-n $OPTARG " ;;
                 "") usage ;;
+            esac ;;
+        H)
+            case "$OPTARG" in
+                "") usage ;;
+                *) nodes="-hostfile $OPTARG " ;;
             esac ;;
         s)
             case "$OPTARG" in
