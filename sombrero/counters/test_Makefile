@@ -12,7 +12,7 @@ TARGETS=$(CTARGETS) $(PYTARGETS) $(OTESTTARGETS)
 all: $(TARGETS)
 
 %.py : %_template.py.c memory_base.py.h
-	cpp -DPYTHON $< | grep -Ev "^\s*;" | ((which yapf &> /dev/null && yapf ) || cat )  > $@
+	cpp -DMKPYMOD $< | grep -Ev "^\s*;" | ((which yapf &> /dev/null && yapf ) || cat )  > $@
 
 %.c : %_template.py.c memory_base.py.h
 	cpp -DTESTING $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@

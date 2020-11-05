@@ -3,7 +3,7 @@
 
 #include "fc_defs.h"
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 // just to have these declared.
 REAL_SIZE = 8
 NF = 4

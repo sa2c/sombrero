@@ -1,13 +1,13 @@
 #include "fc_defs.h"
 
-#ifndef PYTHON
+#ifndef MKPYMOD
 #include "flop_count.h"
 #ifndef TESTING
 #include "global.h"
 #endif
 #endif
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 NF = 4 // just to have it declared.
 #endif
 
@@ -68,7 +68,7 @@ _FD(forward_substitution_loop_flop,
      (complex_mul_flops() + complex_sum_flops()) + // _complex_mul_sub_assign();
      (complex_mul_flops() + complex_sum_flops()))); // _complex_mul_sub_assign();
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 def backward_substitution_loop_flop():
     res = 0
 #else
@@ -76,7 +76,7 @@ float backward_substitution_loop_flop() {
     int res = 0;
 #endif
 
-#ifdef PYTHON
+#ifdef MKPYMOD
     for i in range(clover_matsize()-1,-1,-1):
 #else
     for (int i = clover_matsize() - 1; i >= 0; i--) {
@@ -84,7 +84,7 @@ float backward_substitution_loop_flop() {
         res += 3; // n = i*(i+1)/2+i);
         res += complex_mulR_flops(); //_complex_mulr());
         res += complex_mulR_flops(); //_complex_mulr());
-#ifdef PYTHON
+#ifdef MKPYMOD
         for k in range(i + 1, N()):
 #else
         for (int k = i + 1; k < clover_matsize(); k++) {
@@ -95,12 +95,12 @@ float backward_substitution_loop_flop() {
             // _complex_mul_sub_assign());
             res += complex_mul_flops() + complex_sum_flops();
 
-#ifndef PYTHON
+#ifndef MKPYMOD
         }
     }
 #endif
     return res;
-#ifndef PYTHON
+#ifndef MKPYMOD
 }
 #endif
 
@@ -113,7 +113,7 @@ _FD(site_Cphi_inv_assign_flops,
     (forward_substitution_loop_flop() +
      backward_substitution_loop_flop() + spinor_sum_flops()));
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 def site_g5Cphi_eopre_sq_flops():
 #else
 float site_g5Cphi_eopre_sq_flops() {
@@ -125,11 +125,11 @@ float site_g5Cphi_eopre_sq_flops() {
                                site_spinor_field_minus_f_flops() +
                                site_Cphi_assign_flops());
     return 2 * site_g5Cphi_eopre_flops;
-#ifndef PYTHON
+#ifndef MKPYMOD
 }
 #endif
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 def cg_out_of_loop_flops_per_site(site_operator_flops):
 #else
 float cg_out_of_loop_flops_per_site(float site_operator_flops) {
@@ -141,11 +141,11 @@ float cg_out_of_loop_flops_per_site(float site_operator_flops) {
             site_spinor_field_mul_add_assign_f_flops() +
             site_spinor_field_sub_f_flops() +
             2 * site_spinor_field_sqnorm_f_flops());
-#ifndef PYTHON
+#ifndef MKPYMOD
 }
 #endif
 
-#ifdef PYTHON
+#ifdef MKPYMOD
 def cg_iteration_flops_per_site(site_operator_flops):
 #else
 float cg_iteration_flops_per_site(float site_operator_flops) {
@@ -158,6 +158,6 @@ float cg_iteration_flops_per_site(float site_operator_flops) {
             site_spinor_field_add_assign_f_flops() +
             site_spinor_field_mul_f_flops() +
             site_spinor_field_add_assign_f_flops());
-#ifndef PYTHON
+#ifndef MKPYMOD
 }
 #endif
