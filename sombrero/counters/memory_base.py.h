@@ -13,6 +13,9 @@ Y = 8
 Z = 8
 #else
 #define REAL_SIZE 8
+#ifndef TESTCOUNTERS
+#include "global.h"
+#endif
 #endif
 
 _FD( local_sites, T*X*Y*Z);

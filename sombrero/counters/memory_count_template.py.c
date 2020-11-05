@@ -3,7 +3,7 @@
 
 #ifndef MKPYMOD
 #include "memory_count.h"
-#ifndef TESTING
+#ifndef TESTCOUNTERS
 #include "global.h"
 #endif
 #endif

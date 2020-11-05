@@ -2,7 +2,7 @@
 
 #ifndef MKPYMOD
 #include "flop_count.h"
-#ifndef TESTING
+#ifndef TESTCOUNTERS
 #include "global.h"
 #endif
 #endif

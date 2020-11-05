@@ -15,7 +15,7 @@ all: $(TARGETS)
 	cpp -DMKPYMOD $< | grep -Ev "^\s*;" | ((which yapf &> /dev/null && yapf ) || cat )  > $@
 
 %.c : %_template.py.c memory_base.py.h
-	cpp -DTESTING $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@
+	cpp -DTESTCOUNTERS $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@
 
 %.test.o: %.c
 	gcc -o $@ -c -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 $<
