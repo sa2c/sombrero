@@ -1,0 +1,41 @@
+#+TITLE: Readme
+
+* Performance Calculations
+Performance calculations for:
+- FLOP per site
+- Memory used by the local process (this number could be used with FLOP to get an estimate
+  of the arithmetic intensity )
+- size of MPI data transfers
+
+It is assumed that the lattice is parallelised in all 4 directions (this simplifies slightly the
+computation of the halo size).
+
+** Main Ideas
+The calculations are laid out explicitly so that they should be straighforward to
+check and fix.
+In order to be able to check the intermediate results, the same code can be loaded in a python
+REPL, thanks to a careful (ab)use of the C preprocessor.
+** Usage
+*** Python modules
+To build the python modules, use
+#+BEGIN_SRC bash
+make python
+#+END_SRC
+~yapf~ is used to reformat the output if available (not necessary).
+*** C libraries
+The C files can be included or compiled without issues, but some symbols must be defined
+(i.e., ~NF~, ~T~, ~X~, ~Y~, ~Z~ and the size of the floating point datatype chosen, ~REAL_SIZE~).
+#+BEGIN_SRC bash
+make c
+#+END_SRC
+~clang-format~ is used to reformat the output is available (not necessary).
+*** Compilation of C libraries
+To test the compilation of the C code, use
+#+BEGIN_SRC bash
+make testo
+#+END_SRC
+In this case, some default values are used for the symbols mentioned above.
+
+** Notes
+This code was originally written as a separate repository ( see ~github.com/mmesiti/counters~).
+It has been moved inside Sombrero for simplicity and the git history has been discarded.
