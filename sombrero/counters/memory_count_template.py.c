@@ -3,6 +3,9 @@
 
 #ifndef PYTHON
 #include "memory_count.h"
+#ifndef TESTING
+#include "global.h"
+#endif
 #endif
 
 _FD(ldl_t_size, 2 * NF * (2 * NF + 1) * complex_size());

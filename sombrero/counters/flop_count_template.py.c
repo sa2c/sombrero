@@ -2,6 +2,9 @@
 
 #ifndef PYTHON
 #include "flop_count.h"
+#ifndef TESTING
+#include "global.h"
+#endif
 #endif
 
 #ifdef PYTHON

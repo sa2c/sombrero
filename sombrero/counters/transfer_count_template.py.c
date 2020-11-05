@@ -1,7 +1,11 @@
 #include "fc_defs.h"
 #include "memory_base.py.h"
+
 #ifndef PYTHON
 #include "transfer_count.h"
+#ifndef TESTING
+#include "global.h"
+#endif
 #endif
 
 _FD(spinor_field_memory_transfer, halo_sites() * spinor_size());
