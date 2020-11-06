@@ -378,11 +378,24 @@ int main(int argc, char *argv[]) {
   float Gflops;
   {
     float site_operator_flops = site_g5Cphi_eopre_sq_flops();
-    float Gflops_per_site =
+    float flops_per_site =
         iterations * cg_iteration_flops_per_site(site_operator_flops) +
         cg_out_of_loop_flops_per_site(site_operator_flops);
 
-    Gflops = GLB_VOLUME * Gflops_per_site;
+    Gflops = GLB_VOLUME * flops_per_site / 1.0e9;
+  }
+
+  float local_GB_used;
+  {
+    float local_bc_operation_memory = local_apply_BCs_on_spinor_field_memory();
+    float local_operator_memory =
+        local_g5Cphi_eopre_sq_memory(local_bc_operation_memory);
+
+    local_GB_used =
+        iterations * local_cg_iteration_memory(local_operator_memory) +
+        local_cg_out_of_loop_memory(local_operator_memory);
+
+    local_GB_used /= 1.0e9;
   }
 
   /* Calculate the number of bytes communicated */
@@ -391,6 +404,15 @@ int main(int argc, char *argv[]) {
   long vector_size = 4 * NF * 2 * sizeof(double);
   float bytes_communicated =
       2 * (iterations + 2) * boundary_sizes * vector_size / 1.0e6;
+
+  float Mbytes_communicated;
+  {
+    float operator_memory_transfer = g5Cphi_eopre_sq_memory_transfer();
+    Mbytes_communicated =
+        iterations * cg_iteration_memory_transfer(operator_memory_transfer) +
+        cg_out_of_loop_memory_transfer(operator_memory_transfer);
+    Mbytes_communicated /= 1.0e6;
+  }
 
   /* Initialize gauge, boundary conditions and clover  */
   init_mc();
@@ -401,8 +423,17 @@ int main(int argc, char *argv[]) {
       "MAIN", 0,
       " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated\n",
       casename, Gflops, bytes_communicated);
+  lprintf(
+      "MAIN", 0,
+      " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated\n",
+      casename, Gflops, Mbytes_communicated);
+
   lprintf("MAIN", 0, " %s: %.2f operations per byte\n", casename,
           100 * Gflops / bytes_communicated);
+
+  lprintf("MAIN", 0,
+          " %s: %.2f average arithmetic intensity (is it useful at all?)\n",
+          casename, Gflops / local_GB_used);
 
   /* Generate a pseudofermion field */
   struct timeval start, end, etime;

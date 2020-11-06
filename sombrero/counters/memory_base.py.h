@@ -19,7 +19,10 @@ Z = 8
 
 _FD( local_sites, cT()*cX()*cY()*cZ());
 _FD( local_sites_e, local_sites()/2);
-_FD( halo_sites, 2*local_sites()*(1.0/cT()+1.0/cX()+1.0/cY()+1.0/cZ()));
+_FD( halo_sites, 2*local_sites()*(cTBORDER()/cT()+
+                                  cXBORDER()/cX()+
+                                  cYBORDER()/cY()+
+                                  cZBORDER()/cZ()));
 _FD( halo_sites_e, halo_sites()/2);
 
 _FD( complex_size, 2*REAL_SIZE );

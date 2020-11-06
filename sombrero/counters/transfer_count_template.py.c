@@ -8,7 +8,7 @@
 #endif
 #endif
 
-_FD(spinor_field_memory_transfer, halo_sites() * spinor_size());
+_FD(spinor_field_memory_transfer, 2 * halo_sites_e() * spinor_size());
 
 _FD(Dphi_memory_transfer, spinor_field_memory_transfer());
 
