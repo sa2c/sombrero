@@ -1,20 +1,14 @@
-#include "fc_defs.h"
+#include "fm_defs.h"
 
 #ifndef MKPYMOD
 #include "flop_count.h"
-#ifndef TESTCOUNTERS
-#include "global.h"
-#endif
-#endif
-
-#ifdef MKPYMOD
-NF = 4 // just to have it declared.
+#include "libhr_defines_interface.h" // provides T,X,Y,Z and NF
 #endif
 
 #ifdef REPR_ADJOINT
-    _FD(matrix_mul_flops, 4 * NF * NF - 2 * NF);
+_FD(matrix_mul_flops, 4 * cNF() * cNF() - 2 * cNF());
 #else
-_FD(matrix_mul_flops, 8 * NF * NF - 2 * NF);
+_FD(matrix_mul_flops, 8 * cNF() * cNF() - 2 * cNF());
 #endif
 
 _FD(real_op_flop, 1);
@@ -24,10 +18,10 @@ _FD(complex_mulR_flops, 2); // capital R for legibility (hopefully);
 _FD(complex_norm_flops, 3); // only re ;
 
 // single vector
-_FD(vector_sum_flops, complex_sum_flops() * NF);
-_FD(vector_mul_flops, complex_mulR_flops() * NF); // mul uses mulR ;
-_FD(vector_norm_flops, complex_norm_flops() * NF +
-                       real_op_flop() * NF); // + NF sums (not NF-1)
+_FD(vector_sum_flops, complex_sum_flops() * cNF());
+_FD(vector_mul_flops, complex_mulR_flops() * cNF()); // mul uses mulR ;
+_FD(vector_norm_flops, complex_norm_flops() * cNF() +
+                       real_op_flop() * cNF()); // + cNF() sums (not NF-1)
 
 // single spinor
 _FD(spinor_norm_flops, 4 * vector_norm_flops());
@@ -60,7 +54,7 @@ _FD(site_Cphi_assign_flops, 1.0 / 2 * (8 * matrix_mul_flops() +
                                        spinor_mul_add_assign_flops() +
                                        spinor_sum_flops()));
 
-_FD(clover_matsize, 2 * NF);
+_FD(clover_matsize, 2 * cNF());
 
 _FD(forward_substitution_loop_flop,
     clover_matsize() * (clover_matsize() - 1) / 2 *

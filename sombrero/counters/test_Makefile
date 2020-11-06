@@ -1,4 +1,4 @@
-# This makefile is used only for tests. The files can be included as they are 
+# This makefile is used only for tests. The '*template.py.c" files can be included as they are
 # in any C project.
 
 SRCS=flop_count_template.py.c memory_count_template.py.c transfer_count_template.py.c
@@ -6,25 +6,37 @@ SRCS=flop_count_template.py.c memory_count_template.py.c transfer_count_template
 CTARGETS=$(patsubst %_template.py.c,%.c,$(SRCS))
 PYTARGETS=$(patsubst %_template.py.c,%.py,$(SRCS))
 OTESTTARGETS=$(patsubst %_template.py.c,%.test.o,$(SRCS))
+PYTHONTESTS=$(patsubst %.py, .%.py.test, $(PYTARGETS))
 
-TARGETS=$(CTARGETS) $(PYTARGETS) $(OTESTTARGETS)
+TARGETS=$(CTARGETS) $(PYTARGETS)
 
-all: $(TARGETS)
+TESTS= $(OTESTTARGETS) $(PYTHONTESTS)
+
+
+all: $(TARGETS) $(TESTS) libhr_defines_interface.o
 
 %.py : %_template.py.c memory_base.py.h
 	cpp -DMKPYMOD $< | grep -Ev "^\s*;" | ((which yapf &> /dev/null && yapf ) || cat )  > $@
 
 %.c : %_template.py.c memory_base.py.h
-	cpp -DTESTCOUNTERS $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@
+	cpp -DTESTCOUNTERS $< | ((which clang-format &> /dev/null && cat) || cat )  > $@
 
 %.test.o: %.c
-	gcc -o $@ -c -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 $<
+	gcc -o $@ -c $<
+
+.%.py.test : %.py
+	python -c "import $(patsubst %.py,%,$<)" && touch $@
+
+libhr_defines_interface.o: libhr_defines_interface.c
+	gcc -o $@ -c -DTESTCOUNTERS -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 $<
 
 python: $(PYTARGETS)
 
 c: $(CTARGETS)
 
-testo: $(OTESTTARGETS)
+testo: $(OTESTTARGETS) libhr_defines_interface.o
+
+testpython: $(PYTHONTESTS)
 
 clean:
 	rm -f $(TARGETS)

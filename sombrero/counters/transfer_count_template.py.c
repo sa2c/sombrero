@@ -1,10 +1,10 @@
-#include "fc_defs.h"
+#include "fm_defs.h"
 #include "memory_base.py.h"
 
 #ifndef MKPYMOD
 #include "transfer_count.h"
 #ifndef TESTCOUNTERS
-#include "global.h"
+#include "libhr_defines_interface.h" // provides T,X,Y,Z and NF
 #endif
 #endif
 

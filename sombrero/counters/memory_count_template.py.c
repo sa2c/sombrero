@@ -1,15 +1,13 @@
-#include "fc_defs.h"
+#include "fm_defs.h"
 #include "memory_base.py.h"
 
 #ifndef MKPYMOD
 #include "memory_count.h"
-#ifndef TESTCOUNTERS
-#include "global.h"
-#endif
+#include "libhr_defines_interface.h" // provides T,X,Y,Z and NF
 #endif
 
-_FD(ldl_t_size, 2 * NF * (2 * NF + 1) * complex_size());
-_FD(gauge_matrix_size, NF *vector_size());
+_FD(ldl_t_size, 2 * cNF() * (2 * cNF() + 1) * complex_size());
+_FD(gauge_matrix_size, cNF() *vector_size());
 
 _FD(local_spinor_field_e_memory,
     spinor_size() * (local_sites_e() + halo_sites_e()));
@@ -41,7 +39,7 @@ _FD(local_Cphi_inv_memory,
     2 * local_spinor_field_e_memory() + local_ldl_field_e_memory());
 
 // TO UNDERSTAND - boundary conditions
-_FD(tslice_ext_sites, (X + 2) * (Y + 2) * (Z + 2));
+_FD(tslice_ext_sites, (cX() + 2) * (cY() + 2) * (cZ() + 2));
 
 _FD(local_spinor_field_e_tslice_memory, spinor_size() * tslice_ext_sites());
 

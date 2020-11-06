@@ -1,4 +1,5 @@
 *_count.c
 *_count.py
 *_count.test.o
+.*.py.test
 __pycache__
