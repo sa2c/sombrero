@@ -5,7 +5,7 @@ SRCS=flop_count_template.py.c memory_count_template.py.c transfer_count_template
 
 CTARGETS=$(patsubst %_template.py.c,%.c,$(SRCS))
 PYTARGETS=$(patsubst %_template.py.c,%.py,$(SRCS))
-OTESTTARGETS=$(patsubst %_template.py.c,%.test.o,$(SRCS))
+OTESTTARGETS=$(patsubst %_template.py.c,lib%.o,$(SRCS))
 PYTHONTESTS=$(patsubst %.py, .%.py.test, $(PYTARGETS))
 
 TARGETS=$(CTARGETS) $(PYTARGETS)
@@ -21,7 +21,7 @@ all: $(TARGETS) $(TESTS) libhr_defines_interface.o
 %.c : %_template.py.c memory_base.py.h
 	cpp -DTESTCOUNTERS $< | ((which clang-format &> /dev/null && cat) || cat )  > $@
 
-%.test.o: %.c
+lib%.o: %.c
 	gcc -o $@ -c $<
 
 .%.py.test : %.py

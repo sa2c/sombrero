@@ -7,5 +7,6 @@ clean::
 	rm -fr su2 su2adj su3 su3sym sp4 sp4adj
 	rm -f *~
 	rm -f *.o
+	$(MAKE) -C counters clean
 
 include $(MKDIR)/MkRules
