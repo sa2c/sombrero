@@ -22,13 +22,13 @@ all: $(TARGETS) $(TESTS) libhr_defines_interface.o
 	cpp $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@
 
 %.test.o: %.c
-	gcc -o $@ -c $<
+	$(CC) -std=c99 -o $@ -c $<
 
 .%.py.test : %.py
 	python -c "import $(patsubst %.py,%,$<)" && touch $@
 
 libhr_defines_interface.o: libhr_defines_interface.c
-	gcc -o $@ -c -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 \
+	$(CC) -std=c99 -o $@ -c -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 \
                -DT_BORDER=1 -DX_BORDER=1 -DY_BORDER=1 -DZ_BORDER=1 $<
 
 python: $(PYTARGETS)
