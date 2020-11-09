@@ -1,7 +1,7 @@
 
 TOPDIR=../..
 
-SRCS=flop_count_template.py.c memory_count_template.py.c transfer_count_template.py.c
+SRCS=flop_count_template.py.c memory_count_template.py.c communication_count_template.py.c
 TARGETS=$(patsubst %_template.py.c,lib%.o,$(SRCS))
 
 all : $(TARGETS)

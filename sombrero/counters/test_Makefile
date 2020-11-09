@@ -1,7 +1,7 @@
 # This makefile is used only for tests. The '*template.py.c" files can be included as they are
 # in any C project.
 
-SRCS=flop_count_template.py.c memory_count_template.py.c transfer_count_template.py.c
+SRCS=flop_count_template.py.c memory_count_template.py.c communication_count_template.py.c
 
 CTARGETS=$(patsubst %_template.py.c,%.c,$(SRCS))
 PYTARGETS=$(patsubst %_template.py.c,%.py,$(SRCS))
@@ -19,7 +19,7 @@ all: $(TARGETS) $(TESTS) libhr_defines_interface.o
 	cpp -DMKPYMOD $< | grep -Ev "^\s*;" | ((which yapf &> /dev/null && yapf ) || cat )  > $@
 
 %.c : %_template.py.c memory_base.py.h
-	cpp -DTESTCOUNTERS $< | ((which clang-format &> /dev/null && cat) || cat )  > $@
+	cpp $< | ((which clang-format &> /dev/null && clang-format) || cat )  > $@
 
 %.test.o: %.c
 	gcc -o $@ -c $<
@@ -28,7 +28,7 @@ all: $(TARGETS) $(TESTS) libhr_defines_interface.o
 	python -c "import $(patsubst %.py,%,$<)" && touch $@
 
 libhr_defines_interface.o: libhr_defines_interface.c
-	gcc -o $@ -c -DTESTCOUNTERS -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 \
+	gcc -o $@ -c -DNF=4 -DT=8 -DX=8 -DY=8 -DZ=8 \
                -DT_BORDER=1 -DX_BORDER=1 -DY_BORDER=1 -DZ_BORDER=1 $<
 
 python: $(PYTARGETS)

@@ -3,7 +3,7 @@
 
 #ifndef MKPYMOD
 #include "memory_count.h"
-#include "libhr_defines_interface.h" // provides T,X,Y,Z and NF
+#include "libhr_defines_interface.h" // provides T,X,Y,Z, NF and border sizes
 #endif
 
 _FD(ldl_t_size, 2 * cNF() * (2 * cNF() + 1) * complex_size());

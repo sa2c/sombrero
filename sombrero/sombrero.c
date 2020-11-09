@@ -25,9 +25,9 @@
 #include "random.h"
 #include "update.h"
 
+#include "counters/communication_count.h"
 #include "counters/flop_count.h"
 #include "counters/memory_count.h"
-#include "counters/transfer_count.h"
 
 static int cg_test(spinor_field *in, spinor_field *out, int iterations);
 int init_mc();
@@ -407,10 +407,10 @@ int main(int argc, char *argv[]) {
 
   float Mbytes_communicated;
   {
-    float operator_memory_transfer = g5Cphi_eopre_sq_memory_transfer();
+    float operator_communication = g5Cphi_eopre_sq_communication();
     Mbytes_communicated =
-        iterations * cg_iteration_memory_transfer(operator_memory_transfer) +
-        cg_out_of_loop_memory_transfer(operator_memory_transfer);
+        iterations * cg_iteration_communication(operator_communication) +
+        cg_out_of_loop_communication(operator_communication);
     Mbytes_communicated /= 1.0e6;
   }
 

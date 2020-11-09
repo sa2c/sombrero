@@ -5,34 +5,42 @@ Performance calculations for:
 - FLOP per site
 - Memory used by the local process (this number could be used with FLOP to get an estimate
   of the arithmetic intensity )
-- size of MPI data transfers
-
-It is assumed that the lattice is parallelised in all 4 directions (this simplifies slightly the
-computation of the halo size).
+- size of MPI communications
 
 ** Main Ideas
 The calculations are laid out explicitly so that they should be straighforward to
 check and fix.
+*** Sombrero Dependencies
+This library depends only on a handful of quantities (i.e., ~NF~, ~T~, ~X~, ~Y~, ~Z~, but also ~{T,X,Y,Z}_BORDER~,  and the size of the floating point datatype chosen, ~REAL_SIZE~)
+and does not really need to include anything from Sombrero. The interface that the library needs to see is made explicit in ~libhr_define_interface.h~, and amounts to 9 simple functions that return ~floats~ representing the needed global variables.
+Sombrero has been modified in order to supply an implementation of these 9 functions.
+** Testing
 In order to be able to check the intermediate results, the same code can be loaded in a python
 REPL, thanks to a careful (ab)use of the C preprocessor.
-** Usage
+Testing can be run with the command
+#+BEGIN_SRC bash
+make -f test_Makefile
+#+END_SRC bash
+This will build the c libraries, create the python modules and try and load them in the interpreter.
+
 *** Python modules
 To build the python modules, use
 #+BEGIN_SRC bash
-make python
+make -f test_Makefile python
 #+END_SRC
 ~yapf~ is used to reformat the output if available (not necessary).
+NOTE: the python modules need the global variables/defines (see the Sombrero Dependencies section) to be defined. They can be defined after loading the modules in the REPL.
 *** C libraries
-The C files can be included or compiled without issues, but some symbols must be defined
-(i.e., ~NF~, ~T~, ~X~, ~Y~, ~Z~ and the size of the floating point datatype chosen, ~REAL_SIZE~).
+The C files can be included or compiled without issues. The symbols that should be provided by Sombrero
+(see section "Sombrero Dependencies") are mocked in ~libhr_define_interface.c~ and the values are passed by ~-D~ compilation flags.
 #+BEGIN_SRC bash
-make c
+make -f test_Makefile c
 #+END_SRC
-~clang-format~ is used to reformat the output is available (not necessary).
+~clang-format~ is used to reformat the output if available (not necessary).
 *** Compilation of C libraries
 To test the compilation of the C code, use
 #+BEGIN_SRC bash
-make testo
+make -f test_Makefile testo
 #+END_SRC
 In this case, some default values are used for the symbols mentioned above.
 

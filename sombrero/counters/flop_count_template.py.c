@@ -2,7 +2,7 @@
 
 #ifndef MKPYMOD
 #include "flop_count.h"
-#include "libhr_defines_interface.h" // provides T,X,Y,Z and NF
+#include "libhr_defines_interface.h" // provides T,X,Y,Z, NF and border sizes
 #endif
 
 #ifdef REPR_ADJOINT

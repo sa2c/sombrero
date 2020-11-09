@@ -117,7 +117,7 @@ RBLD = $(if $(DFILES),,rebuild)
 	false
 
 COUNTERSLDIR=sombrero/counters
-COUNTERS=libmemory_count.o libtransfer_count.o libflop_count.o
+COUNTERS=libmemory_count.o libcommunication_count.o libflop_count.o
 COUNTERSFULLPATHS=$(patsubst %,$(COUNTERSLDIR)/%, $(COUNTERS))
 
 $(COUNTERSFULLPATHS):
