@@ -121,7 +121,7 @@ COUNTERS=libmemory_count.o libcommunication_count.o libflop_count.o
 COUNTERSFULLPATHS=$(patsubst %,$(COUNTERSLDIR)/%, $(COUNTERS))
 
 $(COUNTERSFULLPATHS):
-	$(MAKE) -C $(dir $@) $(notdir $@)
+	$(MAKE) -C $(dir $@) CFLAGS='$(CFLAGS)' $(notdir $@)
 
 sombrero/sombrero1: sombrero/su2/sombrero.o sombrero/su2/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_su2.a $(COUNTERSFULLPATHS)
