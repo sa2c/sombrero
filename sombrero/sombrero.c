@@ -489,8 +489,8 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
     if (alpha == 0)
       break;
     oldomega = omega;
-    lprintf("DEBUG", 0, "%16d,", cgiter);
-    lprintf("DEBUG", 0, "%16.8e,", alpha);
+    lprintf("DEBUG", 20, "%16d,", cgiter);
+    lprintf("DEBUG", 20, "%16.8e,", alpha);
     omega = -delta / alpha;
 
     {
@@ -503,12 +503,12 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
             (omega * gamma * (z1[0] - z2[0]) +
              z1[0] * oldomega * (1. + par->shift[0] * omega));
 
-    lprintf("DEBUG", 0, "%16.8e,", z2[0]);
+    lprintf("DEBUG", 20, "%16.8e,", z2[0]);
     spinor_field_mul_add_assign_f(&out[0], -omega * z3[0] / z2[0], &p[0]);
 
     spinor_field_mul_add_assign_f(r, omega, Mk);
     lambda = spinor_field_sqnorm_f(r);
-    lprintf("DEBUG", 0, "%16.8e\n", delta);
+    lprintf("DEBUG", 20, "%16.8e\n", delta);
     gamma = lambda / delta;
     delta = lambda;
 
@@ -535,10 +535,9 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
     double input_norm = spinor_field_sqnorm_f(in);
     double residual_norm = spinor_field_sqnorm_f(Mk);
     double ratio = residual_norm / input_norm;
-    // lprintf("RESULT", 20, "Deviation from expected %1.8e\n", norm); // DEBUG
-    lprintf("RESULT", 0, "Deviation from expected %16.8e\n", ratio); // DEBUG
+    lprintf("RESULT", 20, "Deviation from expected %16.8e\n", ratio);
     lprintf(
-        "RESULT", 0,
+        "RESULT", 20,
         "Residual norm: %16.8e, norm of input: %16.8e, output norm: %16.8e\n",
         residual_norm, input_norm, output_norm); // DEBUG
     error(ratio > 1e-8, 1, "main [sombrero.c]",
