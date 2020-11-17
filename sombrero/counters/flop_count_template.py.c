@@ -157,16 +157,16 @@ float cg_iteration_flops_per_site(float site_operator_flops) {
 #endif
 
 #ifdef MKPYMOD
-def cg_Gflops(real_iterations):
+def cg_Gflops_per_site(real_iterations):
 #else
-float cg_Gflops(float real_iterations){
+float cg_Gflops_per_site(float real_iterations){
     float site_operator_flops, flops_per_site;
 #endif
     site_operator_flops = site_g5Cphi_eopre_sq_flops();
     flops_per_site = (
         real_iterations * cg_iteration_flops_per_site(site_operator_flops) +
         cg_out_of_loop_flops_per_site(site_operator_flops));
-    return cGLB_VOLUME() * flops_per_site / 1.0e9;
+    return flops_per_site / 1.0e9;
 #ifndef MKPYMOD
 }
 #endif

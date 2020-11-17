@@ -397,24 +397,25 @@ int main(int argc, char *argv[]) {
   }
 
   {
-    const float Gflops = cg_Gflops(real_iterations);
+    const float Gflops = GLB_VOLUME * cg_Gflops_per_site(real_iterations);
     const float Mbytes_communicated = cg_Mbytes_communicated(real_iterations);
-    const float local_GB_used = cg_local_GB_used(real_iterations);
+    const float global_GB_used =
+        cg_local_GB_used(real_iterations) * NP_T * NP_X * NP_Y * NP_Z;
 
     lprintf("MAIN", 10, " Performed %d conjugate gradient iterations\n",
             real_iterations);
     lprintf(
         "MAIN", 0,
         " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated "
-        "(bi-directional)\n",
+        "(both directions included)\n",
         casename, Gflops, Mbytes_communicated);
 
     lprintf("MAIN", 0, " %s: %.2f flop per byte communicated\n", casename,
             1000 * Gflops / Mbytes_communicated);
 
     lprintf("MAIN", 0,
-            " %s: %.2f average arithmetic intensity (is it useful at all?)\n",
-            casename, Gflops / local_GB_used);
+            " %s: %.2f average arithmetic intensity estimate (DRAM or L3) \n",
+            casename, Gflops / global_GB_used);
 
     lprintf("RESULT", 0, " %s %.2f Gflops in %f seconds\n", casename, Gflops,
             seconds);
