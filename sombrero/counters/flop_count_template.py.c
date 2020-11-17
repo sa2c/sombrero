@@ -1,8 +1,8 @@
 #include "fm_defs.h"
+#include "libhr_defines_interface.py.h" // provides T,X,Y,Z, NF and border sizes
 
 #ifndef MKPYMOD
 #include "flop_count.h"
-#include "libhr_defines_interface.h" // provides T,X,Y,Z, NF and border sizes
 #endif
 
 #ifdef REPR_ADJOINT
@@ -79,7 +79,7 @@ float backward_substitution_loop_flop() {
         res += complex_mulR_flops(); //_complex_mulr());
         res += complex_mulR_flops(); //_complex_mulr());
 #ifdef MKPYMOD
-        for k in range(i + 1, N()):
+        for k in range(i + 1, clover_matsize()):
 #else
         for (int k = i + 1; k < clover_matsize(); k++) {
 #endif
@@ -152,6 +152,21 @@ float cg_iteration_flops_per_site(float site_operator_flops) {
             site_spinor_field_add_assign_f_flops() +
             site_spinor_field_mul_f_flops() +
             site_spinor_field_add_assign_f_flops());
+#ifndef MKPYMOD
+}
+#endif
+
+#ifdef MKPYMOD
+def cg_Gflops(real_iterations):
+#else
+float cg_Gflops(float real_iterations){
+    float site_operator_flops, flops_per_site;
+#endif
+    site_operator_flops = site_g5Cphi_eopre_sq_flops();
+    flops_per_site = (
+        real_iterations * cg_iteration_flops_per_site(site_operator_flops) +
+        cg_out_of_loop_flops_per_site(site_operator_flops));
+    return cGLB_VOLUME() * flops_per_site / 1.0e9;
 #ifndef MKPYMOD
 }
 #endif

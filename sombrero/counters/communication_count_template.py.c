@@ -3,7 +3,6 @@
 
 #ifndef MKPYMOD
 #include "communication_count.h"
-#include "libhr_defines_interface.h" // provides T,X,Y,Z, NF and border sizes
 #endif
 
 _FD(spinor_field_communication, 2 * halo_sites_e() * spinor_size());
@@ -42,6 +41,22 @@ def cg_iteration_communication(operator_communication):
 float cg_iteration_communication(float operator_communication) {
 #endif
     return operator_communication;
+#ifndef MKPYMOD
+}
+#endif
+
+
+#ifdef MKPYMOD
+def cg_Mbytes_communicated(real_iterations):
+#else
+float cg_Mbytes_communicated(int real_iterations){
+      float operator_communication, Mbytes_communicated;
+#endif
+      operator_communication = g5Cphi_eopre_sq_communication();
+      Mbytes_communicated = (
+        real_iterations * cg_iteration_communication(operator_communication) +
+        cg_out_of_loop_communication(operator_communication));
+      return Mbytes_communicated / 1.0e6;
 #ifndef MKPYMOD
 }
 #endif

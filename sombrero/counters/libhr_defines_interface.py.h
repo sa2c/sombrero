@@ -11,6 +11,7 @@ def cTBORDER() : return T_BORDER;
 def cXBORDER() : return X_BORDER;
 def cYBORDER() : return Y_BORDER;
 def cZBORDER() : return Z_BORDER;
+def cGLB_VOLUME() : return GLB_VOLUME;
 #else
 // These cannot be static, they are part of the interface
 float cT();
@@ -22,5 +23,6 @@ float cTBORDER();
 float cXBORDER();
 float cYBORDER();
 float cZBORDER();
+float cGLB_VOLUME();
 #endif
 #endif // __LIBHR_DEFINES_INTERFACE_H_

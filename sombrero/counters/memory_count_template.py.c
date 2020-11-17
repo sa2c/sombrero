@@ -1,9 +1,9 @@
 #include "fm_defs.h"
 #include "memory_base.py.h"
+#include "libhr_defines_interface.py.h" // provides T,X,Y,Z, NF and border sizes
 
 #ifndef MKPYMOD
 #include "memory_count.h"
-#include "libhr_defines_interface.h" // provides T,X,Y,Z, NF and border sizes
 #endif
 
 _FD(ldl_t_size, 2 * cNF() * (2 * cNF() + 1) * complex_size());
@@ -128,6 +128,22 @@ float local_cg_iteration_memory(float local_operator_memory) {
             local_spinor_field_sqnorm_f_memory() +
             local_spinor_field_mul_f_memory() +
             local_spinor_field_mul_add_assign_f_memory());
+#ifndef MKPYMOD
+}
+#endif
+
+#ifdef MKPYMOD
+def cg_local_GB_used(real_iterations):
+#else
+float cg_local_GB_used(int real_iterations){
+    float local_bc_operation_memory, local_operator_memory, local_B_used;
+#endif
+    local_bc_operation_memory = local_apply_BCs_on_spinor_field_memory();
+    local_operator_memory = local_g5Cphi_eopre_sq_memory(local_bc_operation_memory);
+    local_B_used = (real_iterations * local_cg_iteration_memory(local_operator_memory) +
+        local_cg_out_of_loop_memory(local_operator_memory));
+
+    return  local_B_used / 1.0e9;
 #ifndef MKPYMOD
 }
 #endif

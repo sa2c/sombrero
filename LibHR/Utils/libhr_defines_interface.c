@@ -12,3 +12,4 @@ float cTBORDER() { return T_BORDER; };
 float cXBORDER() { return X_BORDER; };
 float cYBORDER() { return Y_BORDER; };
 float cZBORDER() { return Z_BORDER; };
+float cGLB_VOLUME() { return GLB_VOLUME; }

@@ -12,5 +12,6 @@ float cTBORDER();
 float cXBORDER();
 float cYBORDER();
 float cZBORDER();
+float cGLB_VOLUME();
 
 #endif // __LIBHR_DEFINES_INTERFACE_H_

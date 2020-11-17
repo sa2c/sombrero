@@ -371,92 +371,56 @@ int main(int argc, char *argv[]) {
   char casename[] = "Case 6";
 #endif
 
-  /* Time a number of conjugate gradient steps */
-  int iterations = 50;
-
-  /* Calculate the full flop count */
-  float Gflops;
-  {
-    float site_operator_flops = site_g5Cphi_eopre_sq_flops();
-    float flops_per_site =
-        iterations * cg_iteration_flops_per_site(site_operator_flops) +
-        cg_out_of_loop_flops_per_site(site_operator_flops);
-
-    Gflops = GLB_VOLUME * flops_per_site / 1.0e9;
-  }
-
-  float local_GB_used;
-  {
-    float local_bc_operation_memory = local_apply_BCs_on_spinor_field_memory();
-    float local_operator_memory =
-        local_g5Cphi_eopre_sq_memory(local_bc_operation_memory);
-
-    local_GB_used =
-        iterations * local_cg_iteration_memory(local_operator_memory) +
-        local_cg_out_of_loop_memory(local_operator_memory);
-
-    local_GB_used /= 1.0e9;
-  }
-
-  /* Calculate the number of bytes communicated */
-  long boundary_sizes = T_BORDER * 2 * X * Y * Z + X_BORDER * 2 * T * Y * Z +
-                        Y_BORDER * 2 * T * X * Z + Z_BORDER * 2 * T * X * Y;
-  long vector_size = 4 * NF * 2 * sizeof(double);
-  float bytes_communicated =
-      2 * (iterations + 2) * boundary_sizes * vector_size / 1.0e6;
-
-  float Mbytes_communicated;
-  {
-    float operator_communication = g5Cphi_eopre_sq_communication();
-    Mbytes_communicated =
-        iterations * cg_iteration_communication(operator_communication) +
-        cg_out_of_loop_communication(operator_communication);
-    Mbytes_communicated /= 1.0e6;
-  }
-
   /* Initialize gauge, boundary conditions and clover  */
-  init_mc();
-
-  lprintf("MAIN", 10, " Performing %d conjugate gradient iterations\n",
-          iterations);
-  lprintf(
-      "MAIN", 0,
-      " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated\n",
-      casename, Gflops, bytes_communicated);
-  lprintf(
-      "MAIN", 0,
-      " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated\n",
-      casename, Gflops, Mbytes_communicated);
-
-  lprintf("MAIN", 0, " %s: %.2f operations per byte\n", casename,
-          100 * Gflops / bytes_communicated);
-
-  lprintf("MAIN", 0,
-          " %s: %.2f average arithmetic intensity (is it useful at all?)\n",
-          casename, Gflops / local_GB_used);
 
   /* Generate a pseudofermion field */
-  struct timeval start, end, etime;
-  spinor_field *in = alloc_spinor_field_f(1, &glat_default);
-  spinor_field *out = alloc_spinor_field_f(1, &glat_default);
-  flat_source(in);
+  float seconds;
+  int real_iterations;
+  {
+    struct timeval start, end, etime;
+    init_mc();
+    spinor_field *in = alloc_spinor_field_f(1, &glat_default);
+    spinor_field *out = alloc_spinor_field_f(1, &glat_default);
+    flat_source(in);
 
-  gettimeofday(&start, 0);
+    gettimeofday(&start, 0);
 
-  cg_test(in, out, iterations);
+    int iterations = 50;
+    real_iterations = cg_test(in, out, iterations);
 
-  gettimeofday(&end, 0);
-  timeval_subtract(&etime, &end, &start);
-  float seconds = etime.tv_sec + etime.tv_usec / 1000000.0;
-  lprintf("RESULT", 0, " %s %.2f Gflops in %f seconds\n", casename, Gflops,
-          seconds);
-  lprintf("RESULT", 0, " %s %.2f Gflops/seconds\n", casename, Gflops / seconds);
+    gettimeofday(&end, 0);
+    timeval_subtract(&etime, &end, &start);
+    seconds = etime.tv_sec + etime.tv_usec / 1000000.0;
+    free_spinor_field_f(out);
+    /* Deallocate gauge */
+    end_mc();
+  }
 
-  free_spinor_field_f(out);
+  {
+    const float Gflops = cg_Gflops(real_iterations);
+    const float Mbytes_communicated = cg_Mbytes_communicated(real_iterations);
+    const float local_GB_used = cg_local_GB_used(real_iterations);
 
-  /* Deallocate gauge */
-  end_mc();
+    lprintf("MAIN", 10, " Performed %d conjugate gradient iterations\n",
+            real_iterations);
+    lprintf(
+        "MAIN", 0,
+        " %s: %.2fe9 floating point operations and %.2fe6 bytes communicated "
+        "(bi-directional)\n",
+        casename, Gflops, Mbytes_communicated);
 
+    lprintf("MAIN", 0, " %s: %.2f flop per byte communicated\n", casename,
+            1000 * Gflops / Mbytes_communicated);
+
+    lprintf("MAIN", 0,
+            " %s: %.2f average arithmetic intensity (is it useful at all?)\n",
+            casename, Gflops / local_GB_used);
+
+    lprintf("RESULT", 0, " %s %.2f Gflops in %f seconds\n", casename, Gflops,
+            seconds);
+    lprintf("RESULT", 0, " %s %.2f Gflops/seconds\n", casename,
+            Gflops / seconds);
+  }
   /* close communications */
   finalize_process();
 
@@ -508,7 +472,6 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
 
   /* use out[0] as initial guess */
   g5Cphi_eopre_sq(0.1, Mk, &out[0]);
-  ++cgiter;
   spinor_field_mul_add_assign_f(Mk, -par->shift[0], &out[0]);
   spinor_field_sub_f(r, in, Mk);
 
@@ -517,20 +480,35 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
   z1[0] = z2[0] = 1.;
   spinor_field_copy_f(&p[0], r);
 
-  /* cg recursion */
+  /* cg iterations*/
+  lprintf("DEBUG", 20, "%16s,%16s,%16s,%16s,%16s\n", "iteration", "alpha",
+          "z3[0]_denom", "z2[0]", "delta");
   do {
     g5Cphi_eopre_sq(0.1, Mk, k);
     alpha = spinor_field_prod_re_f(k, Mk);
+    if (alpha == 0)
+      break;
     oldomega = omega;
+    lprintf("DEBUG", 0, "%16d,", cgiter);
+    lprintf("DEBUG", 0, "%16.8e,", alpha);
     omega = -delta / alpha;
+
+    {
+      double z30denom = (omega * gamma * (z1[0] - z2[0]) +
+                         z1[0] * oldomega * (1. + par->shift[0] * omega));
+      lprintf("DEBUG", 20, "%16.8e,", z30denom);
+    }
 
     z3[0] = oldomega * z1[0] * z2[0] /
             (omega * gamma * (z1[0] - z2[0]) +
              z1[0] * oldomega * (1. + par->shift[0] * omega));
+
+    lprintf("DEBUG", 0, "%16.8e,", z2[0]);
     spinor_field_mul_add_assign_f(&out[0], -omega * z3[0] / z2[0], &p[0]);
 
     spinor_field_mul_add_assign_f(r, omega, Mk);
     lambda = spinor_field_sqnorm_f(r);
+    lprintf("DEBUG", 0, "%16.8e\n", delta);
     gamma = lambda / delta;
     delta = lambda;
 
@@ -548,15 +526,25 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
     ++cgiter;
   } while (cgiter < iterations);
 
-  double norm;
-  g5Cphi_eopre_sq(0.1, Mk, &out[0]);
-  ++cgiter;
-  spinor_field_mul_add_assign_f(Mk, -par->shift[0], &out[0]);
-  spinor_field_sub_f(Mk, Mk, in);
-  norm = spinor_field_sqnorm_f(Mk) / spinor_field_sqnorm_f(in);
-  lprintf("RESULT", 20, "Deviation from expected %1.8e\n", norm);
-  error(norm > 1e-8, 1, "main [sombrero.c]",
-        "Result of CG inversion incorrect\n");
+  {
+    double output_norm = spinor_field_sqnorm_f(Mk);
+    g5Cphi_eopre_sq(0.1, Mk, &out[0]);
+    ++cgiter;
+    spinor_field_mul_add_assign_f(Mk, -par->shift[0], &out[0]);
+    spinor_field_sub_f(Mk, Mk, in);
+
+    double input_norm = spinor_field_sqnorm_f(in);
+    double residual_norm = spinor_field_sqnorm_f(Mk);
+    double ratio = residual_norm / input_norm;
+    // lprintf("RESULT", 20, "Deviation from expected %1.8e\n", norm); // DEBUG
+    lprintf("RESULT", 0, "Deviation from expected %16.8e\n", ratio); // DEBUG
+    lprintf(
+        "RESULT", 0,
+        "Residual norm: %16.8e, norm of input: %16.8e, output norm: %16.8e\n",
+        residual_norm, input_norm, output_norm); // DEBUG
+    error(ratio > 1e-8, 1, "main [sombrero.c]",
+          "Result of CG inversion incorrect\n");
+  }
 
   /* free memory */
   free_spinor_field_f(p);
