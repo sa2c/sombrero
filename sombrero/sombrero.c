@@ -445,7 +445,6 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
   par->shift = &shift;
 
   int i;
-  int cgiter;
   unsigned short notconverged;
 
   /* fare qualche check sugli input */
@@ -465,7 +464,7 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
   z3 = malloc(sizeof(*z3));
 
   /* init recursion */
-  cgiter = 0;
+  int cgiter = 0;
   omega = 1.;
   gamma = 0.;
   innorm2 = spinor_field_sqnorm_f(in);
@@ -529,7 +528,6 @@ static int cg_test(spinor_field *in, spinor_field *out, int iterations) {
   {
     double output_norm = spinor_field_sqnorm_f(Mk);
     g5Cphi_eopre_sq(0.1, Mk, &out[0]);
-    ++cgiter;
     spinor_field_mul_add_assign_f(Mk, -par->shift[0], &out[0]);
     spinor_field_sub_f(Mk, Mk, in);
 
