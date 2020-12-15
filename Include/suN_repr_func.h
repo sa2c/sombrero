@@ -11,7 +11,7 @@
     #endif
   #elif defined REPR_SYMMETRIC
     #if NG == 3
-      #include "su3as_repr_func.h"
+      #include "su3sym_repr_func.h"
     #endif
   #endif
 #elif defined GAUGE_SPN
