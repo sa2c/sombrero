@@ -23,6 +23,7 @@
 #include "logger.h"
 #include "memory.h"
 #include "random.h"
+#include "sombrero.h"
 #include "update.h"
 
 #include "counters/communication_count.h"
