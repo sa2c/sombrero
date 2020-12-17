@@ -129,7 +129,7 @@ static void split_lattice(int np[4]) {
   }
 }
 
-static void read_cmdline(int argc, char *argv[]) {
+static void read_cmdline_sombrero(int argc, char *argv[]) {
   int i, as = 0, aw = 0, ap = 0, av = 0, al = 0, requested = 1;
 
   for (i = 1; i < argc; i++) {
@@ -151,7 +151,7 @@ static void read_cmdline(int argc, char *argv[]) {
     }
   }
 
-  error(argc < requested, 1, "read_cmdline [sombrero.c]",
+  error(argc < requested, 1, "read_cmdline_sombrero [sombrero.c]",
         "Arguments: [ -w ] [ -s small | medium | large | very_large ]");
 
   int loglevel = 10;
@@ -161,7 +161,7 @@ static void read_cmdline(int argc, char *argv[]) {
     } else if (strcmp(argv[av], "verbose") == 0) {
       loglevel = 50;
     } else {
-      error(1, 1, "read_cmdline [sombrero.c]",
+      error(1, 1, "read_cmdline_sombrero [sombrero.c]",
             " Unrecognized verbosity level (use -v result or -v verbose)\n");
     }
   }
@@ -201,7 +201,7 @@ static void read_cmdline(int argc, char *argv[]) {
     } else if (strcmp(argv[as], "very_large") == 0) {
       size = 3;
     } else {
-      error(1, 1, "read_cmdline [sombrero.c]",
+      error(1, 1, "read_cmdline_sombrero [sombrero.c]",
             "Arguments: [-s {small,medium,large,very_large}] [-w]");
     }
   }
@@ -215,7 +215,7 @@ static void read_cmdline(int argc, char *argv[]) {
       x[1] = 24;
       x[2] = 24;
       x[3] = 24;
-      error(n_nodes > 1728, 1, "read_cmdline [sombrero.c]",
+      error(n_nodes > 1728, 1, "read_cmdline_sombrero [sombrero.c]",
             "Too many MPI ranks for a small lattice");
 
     } else if (size == 1) {
@@ -224,7 +224,7 @@ static void read_cmdline(int argc, char *argv[]) {
       x[1] = 48;
       x[2] = 48;
       x[3] = 48;
-      error(n_nodes > 27648, 1, "read_cmdline [sombrero.c]",
+      error(n_nodes > 27648, 1, "read_cmdline_sombrero [sombrero.c]",
             "Too many MPI ranks for a medium lattice");
 
     } else if (size == 2) {
@@ -233,7 +233,7 @@ static void read_cmdline(int argc, char *argv[]) {
       x[1] = 64;
       x[2] = 64;
       x[3] = 64;
-      error(n_nodes > 98304, 1, "read_cmdline [sombrero.c]",
+      error(n_nodes > 98304, 1, "read_cmdline_sombrero [sombrero.c]",
             "Too many MPI ranks for a small lattice");
 
     } else {
@@ -242,7 +242,7 @@ static void read_cmdline(int argc, char *argv[]) {
       x[1] = 96;
       x[2] = 96;
       x[3] = 96;
-      error(n_nodes > 442368, 1, "read_cmdline [sombrero.c]",
+      error(n_nodes > 442368, 1, "read_cmdline_sombrero [sombrero.c]",
             "Too many MPI ranks for a small lattice");
     }
   } else {
@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
   /* setup process communications */
   setup_process_sombrero(&argc, &argv);
 
-  read_cmdline(argc, argv);
+  read_cmdline_sombrero(argc, argv);
 
   /* set random number variables */
   input_rlx rlx_var;
