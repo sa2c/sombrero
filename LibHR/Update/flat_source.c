@@ -8,8 +8,8 @@
 #include <math.h>
 
 #define _vector_one_f(r)                                                       \
-  for (int _i = 0; i < NF; ++i)                                                \
-    (r).c[i] = 1;
+  for (int _i = 0; _i < NF; ++_i)                                              \
+    (r).c[_i] = 1;
 
 #define _spinor_one_f(r)                                                       \
   _vector_one_f((r).c[0]);                                                     \
