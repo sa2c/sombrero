@@ -7,6 +7,10 @@
 #include "update.h"
 #include <math.h>
 
+#define _vector_one_f(r)                                                       \
+  for (int _i = 0; i < NF; ++i)                                                \
+    (r).c[i] = 1;
+
 #define _spinor_one_f(r)                                                       \
   _vector_one_f((r).c[0]);                                                     \
   _vector_one_f((r).c[1]);                                                     \
