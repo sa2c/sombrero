@@ -336,7 +336,7 @@ int main(int argc, char *argv[]) {
 
   /* setup lattice geometry */
   if (geometry_init() == 1) {
-    finalize_process();
+    finalize_process_sombrero();
     return 0;
   }
   geometry_mpi_eo();
