@@ -3,7 +3,7 @@
 
 #include "spinor_field.h"
 
-int setup_process_sombrero(int argc, char **argv);
+int setup_process_sombrero(int *argc, char ***argv);
 int finalize_process_sombrero();
 
 void flat_source(spinor_field *s);
