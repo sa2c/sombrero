@@ -323,7 +323,7 @@ static void read_cmdline(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
   /* setup process communications */
-  setup_process(&argc, &argv);
+  setup_process_sombrero(&argc, &argv);
 
   read_cmdline(argc, argv);
 
@@ -423,7 +423,7 @@ int main(int argc, char *argv[]) {
             Gflops / seconds);
   }
   /* close communications */
-  finalize_process();
+  finalize_process_sombrero();
 
   return 0;
 }
