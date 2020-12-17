@@ -340,7 +340,6 @@ int main(int argc, char *argv[]) {
     finalize_process_sombrero();
     return 0;
   }
-  geometry_mpi_eo();
 
   /* setup random numbers */
   rlxd_init(rlx_var.rlxd_level,
