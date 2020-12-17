@@ -7,6 +7,12 @@
 #include "update.h"
 #include <math.h>
 
+#define _spinor_one_f(r)                                                       \
+  _vector_one_f((r).c[0]);                                                     \
+  _vector_one_f((r).c[1]);                                                     \
+  _vector_one_f((r).c[2]);                                                     \
+  _vector_one_f((r).c[3])
+
 void flat_source(spinor_field *s) {
   _ONE_SPINOR_FOR(s) { _spinor_one_f(*_SPINOR_PTR(s)); }
   // if(CID == 0){
