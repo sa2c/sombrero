@@ -1,7 +1,7 @@
 TOPDIR = ..
 MKDIR = $(TOPDIR)/Make
 
-SUBDIRS = $(shell find * -maxdepth 0 -type d)
+SUBDIRS=Error Geometry IO Interface Inverters Memory Random Statistics Update Utils 
 LIBDIRS = $(SUBDIRS)
 
 clean::
