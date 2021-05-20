@@ -236,7 +236,7 @@ static void read_cmdline_sombrero(int argc, char *argv[]) {
       x[2] = 64;
       x[3] = 64;
       error(n_nodes > 98304, 1, "read_cmdline_sombrero [sombrero.c]",
-            "Too many MPI ranks for a small lattice");
+            "Too many MPI ranks for a large lattice");
 
     } else {
 
@@ -245,7 +245,7 @@ static void read_cmdline_sombrero(int argc, char *argv[]) {
       x[2] = 96;
       x[3] = 96;
       error(n_nodes > 442368, 1, "read_cmdline_sombrero [sombrero.c]",
-            "Too many MPI ranks for a small lattice");
+            "Too many MPI ranks for a very_large lattice");
     }
   } else {
     // Weak scaling, increase lattice size with the number of MPI ranks
@@ -271,6 +271,18 @@ static void read_cmdline_sombrero(int argc, char *argv[]) {
       x[1] = 48;
       x[2] = 48;
       x[3] = 48;
+      requested += 1;
+
+    } else if (size == 3) {
+
+      /* local size 64^3 = */
+      error(n_nodes < 4, 1, "main [sombrero.c]",
+            "A minimum of 4 MPI ranks is required for weak scaling with very_large "
+            "local volume. Try -w small or increase the number of nodes\n");
+      x[0] = n_nodes;
+      x[1] = 64;
+      x[2] = 64;
+      x[3] = 64;
       requested += 1;
 
     } else {
