@@ -112,6 +112,29 @@ Case 5: QCD with sextet fermions
 
 Case 6: Symplectic four color QCD with adjoint fermions
 
+## Problem sizes
+
+The default problem sizes are defined as follows:
+
+In the case of strong scaling:
+
+| Size       | Global spatial length | Global temporal length |
+|------------|-----------------------|------------------------|
+| small      | 24                    | 32                     |
+| medium     | 48                    | 64                     |
+| large      | 64                    | 96                     |
+| very_large | 96                    | 128                    |
+
+In the case of weak scaling:
+
+| Size       | Local spatial length | Local temporal length | Global spatial length  | Global temporal length |
+|------------|----------------------|-----------------------|------------------------|------------------------|
+| small      | 4                    | 4                     | dynamically determined | dynamically determined |
+| medium     | 24                   | 1                     | 24                     | number of MPI ranks    |
+| large      | 48                   | 1                     | 48                     | number of MPI ranks    |
+| very_large | 64                   | 1                     | 64                     | number of MPI ranks    |
+
+
 ## Miscellaneous
 
 Additional parameters `-l` and `-p` exist for more precise control of the problem size. The benchmark theories are defined on a four dimensional lattice, which is partitioned equally among the MPI ranks.
