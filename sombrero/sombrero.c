@@ -341,6 +341,14 @@ int main(int argc, char *argv[]) {
 
   read_cmdline_sombrero(argc, argv);
 
+  /* output version information */
+  lprintf("MAIN", 0,
+          "SOMBRERO built from HiRep commit {{hirep_commit}}\n");
+  lprintf("MAIN", 0,
+          "Base SOMBRERO commit {{sombrero_commit}}\n");
+  lprintf("MAIN", 0,
+          "SOMBRERO built using shoplifter commit {{shoplifter_commit}}\n");
+
   /* set random number variables */
   input_rlx rlx_var;
   rlx_var.rlxd_level = 1;

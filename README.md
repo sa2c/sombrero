@@ -1,5 +1,9 @@
 ![SOMBRERO](sombrero.png)
 
+* [HiRep version: {{hirep_commit}}]({{hirep_url}})
+* [SOMBRERO base version: {{sombrero_commit}}]({{sombrero_url}})
+* [shoplifter version: {{shoplifter_commit}}]({{shoplifter_url}})
+
 A benchmarking utility for high performance computing based on lattice field theory applications.
 
 ## Requirements
