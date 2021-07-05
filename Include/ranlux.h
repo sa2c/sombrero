@@ -1,0 +1,31 @@
+/* This is part of the ranlux 3.3 distribution by Martin Luesher */
+
+#ifndef RANLUX_H
+#define RANLUX_H
+
+/*******************************************************************************
+*
+* file ranlxd.h
+*
+* Copyright (C) 2005 Martin Luescher
+*
+* This software is distributed under the terms of the GNU General Public
+* License (GPL)
+*
+*******************************************************************************/
+
+extern void rlxd_init(int level,int seed);
+
+/*******************************************************************************
+*
+* file ranlxs.h
+*
+* Copyright (C) 2005 Martin Luescher
+*
+* This software is distributed under the terms of the GNU General Public
+* License (GPL)
+*
+*******************************************************************************/
+
+
+#endif /* RANLUX_H */

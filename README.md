@@ -1,8 +1,8 @@
 ![SOMBRERO](sombrero.png)
 
-* [HiRep version: {{hirep_commit}}]({{hirep_url}})
-* [SOMBRERO base version: {{sombrero_commit}}]({{sombrero_url}})
-* [shoplifter version: {{shoplifter_commit}}]({{shoplifter_url}})
+* [HiRep version: 022f909](https://github.com/sa2c/HiRep/tree/022f909)
+* [SOMBRERO base version: 31eb5fe](https://github.com/sa2c/SOMBRERO/tree/31eb5fe)
+* [shoplifter version: 2ed4c5e](https://github.com/sa2c/shoplifter/tree/2ed4c5e)
 
 A benchmarking utility for high performance computing based on lattice field theory applications.
 

@@ -1,0 +1,39 @@
+#define _group_represent(v,u)\
+ (v).c[0]= -cimag((u).c[0])*cimag((u).c[0])+creal((u).c[0])*creal((u).c[0])+I*(+2.000000000000000e+00*cimag((u).c[0])*creal((u).c[0]));\
+ (v).c[1]= +1.414213562373095e+00*(-cimag((u).c[0])*cimag((u).c[1])+creal((u).c[0])*creal((u).c[1]))+I*(+1.414213562373095e+00*(+cimag((u).c[0])*creal((u).c[1])+cimag((u).c[1])*creal((u).c[0])));\
+ (v).c[2]= -cimag((u).c[1])*cimag((u).c[1])+creal((u).c[1])*creal((u).c[1])+I*(+2.000000000000000e+00*cimag((u).c[1])*creal((u).c[1]));\
+ (v).c[3]= +1.414213562373095e+00*(-cimag((u).c[0])*cimag((u).c[2])+creal((u).c[0])*creal((u).c[2]))+I*(+1.414213562373095e+00*(+cimag((u).c[0])*creal((u).c[2])+cimag((u).c[2])*creal((u).c[0])));\
+ (v).c[4]= +1.414213562373095e+00*(-cimag((u).c[1])*cimag((u).c[2])+creal((u).c[1])*creal((u).c[2]))+I*(+1.414213562373095e+00*(+cimag((u).c[1])*creal((u).c[2])+cimag((u).c[2])*creal((u).c[1])));\
+ (v).c[5]= -cimag((u).c[2])*cimag((u).c[2])+creal((u).c[2])*creal((u).c[2])+I*(+2.000000000000000e+00*cimag((u).c[2])*creal((u).c[2]));\
+ (v).c[6]= +1.414213562373095e+00*(-cimag((u).c[0])*cimag((u).c[3])+creal((u).c[0])*creal((u).c[3]))+I*(+1.414213562373095e+00*(+cimag((u).c[0])*creal((u).c[3])+cimag((u).c[3])*creal((u).c[0])));\
+ (v).c[7]= -cimag((u).c[0])*cimag((u).c[4])-cimag((u).c[1])*cimag((u).c[3])+creal((u).c[0])*creal((u).c[4])+creal((u).c[1])*creal((u).c[3])+I*(+cimag((u).c[0])*creal((u).c[4])+cimag((u).c[1])*creal((u).c[3])+cimag((u).c[3])*creal((u).c[1])+cimag((u).c[4])*creal((u).c[0]));\
+ (v).c[8]= +1.414213562373095e+00*(-cimag((u).c[1])*cimag((u).c[4])+creal((u).c[1])*creal((u).c[4]))+I*(+1.414213562373095e+00*(+cimag((u).c[1])*creal((u).c[4])+cimag((u).c[4])*creal((u).c[1])));\
+ (v).c[9]= -cimag((u).c[0])*cimag((u).c[5])-cimag((u).c[2])*cimag((u).c[3])+creal((u).c[0])*creal((u).c[5])+creal((u).c[2])*creal((u).c[3])+I*(+cimag((u).c[0])*creal((u).c[5])+cimag((u).c[2])*creal((u).c[3])+cimag((u).c[3])*creal((u).c[2])+cimag((u).c[5])*creal((u).c[0]));\
+ (v).c[10]= -cimag((u).c[1])*cimag((u).c[5])-cimag((u).c[2])*cimag((u).c[4])+creal((u).c[1])*creal((u).c[5])+creal((u).c[2])*creal((u).c[4])+I*(+cimag((u).c[1])*creal((u).c[5])+cimag((u).c[2])*creal((u).c[4])+cimag((u).c[4])*creal((u).c[2])+cimag((u).c[5])*creal((u).c[1]));\
+ (v).c[11]= +1.414213562373095e+00*(-cimag((u).c[2])*cimag((u).c[5])+creal((u).c[2])*creal((u).c[5]))+I*(+1.414213562373095e+00*(+cimag((u).c[2])*creal((u).c[5])+cimag((u).c[5])*creal((u).c[2])));\
+ (v).c[12]= -cimag((u).c[3])*cimag((u).c[3])+creal((u).c[3])*creal((u).c[3])+I*(+2.000000000000000e+00*cimag((u).c[3])*creal((u).c[3]));\
+ (v).c[13]= +1.414213562373095e+00*(-cimag((u).c[3])*cimag((u).c[4])+creal((u).c[3])*creal((u).c[4]))+I*(+1.414213562373095e+00*(+cimag((u).c[3])*creal((u).c[4])+cimag((u).c[4])*creal((u).c[3])));\
+ (v).c[14]= -cimag((u).c[4])*cimag((u).c[4])+creal((u).c[4])*creal((u).c[4])+I*(+2.000000000000000e+00*cimag((u).c[4])*creal((u).c[4]));\
+ (v).c[15]= +1.414213562373095e+00*(-cimag((u).c[3])*cimag((u).c[5])+creal((u).c[3])*creal((u).c[5]))+I*(+1.414213562373095e+00*(+cimag((u).c[3])*creal((u).c[5])+cimag((u).c[5])*creal((u).c[3])));\
+ (v).c[16]= +1.414213562373095e+00*(-cimag((u).c[4])*cimag((u).c[5])+creal((u).c[4])*creal((u).c[5]))+I*(+1.414213562373095e+00*(+cimag((u).c[4])*creal((u).c[5])+cimag((u).c[5])*creal((u).c[4])));\
+ (v).c[17]= -cimag((u).c[5])*cimag((u).c[5])+creal((u).c[5])*creal((u).c[5])+I*(+2.000000000000000e+00*cimag((u).c[5])*creal((u).c[5]));\
+ (v).c[18]= +1.414213562373095e+00*(-cimag((u).c[0])*cimag((u).c[6])+creal((u).c[0])*creal((u).c[6]))+I*(+1.414213562373095e+00*(+cimag((u).c[0])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[0])));\
+ (v).c[19]= -cimag((u).c[0])*cimag((u).c[7])-cimag((u).c[1])*cimag((u).c[6])+creal((u).c[0])*creal((u).c[7])+creal((u).c[1])*creal((u).c[6])+I*(+cimag((u).c[0])*creal((u).c[7])+cimag((u).c[1])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[1])+cimag((u).c[7])*creal((u).c[0]));\
+ (v).c[20]= +1.414213562373095e+00*(-cimag((u).c[1])*cimag((u).c[7])+creal((u).c[1])*creal((u).c[7]))+I*(+1.414213562373095e+00*(+cimag((u).c[1])*creal((u).c[7])+cimag((u).c[7])*creal((u).c[1])));\
+ (v).c[21]= -cimag((u).c[0])*cimag((u).c[8])-cimag((u).c[2])*cimag((u).c[6])+creal((u).c[0])*creal((u).c[8])+creal((u).c[2])*creal((u).c[6])+I*(+cimag((u).c[0])*creal((u).c[8])+cimag((u).c[2])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[2])+cimag((u).c[8])*creal((u).c[0]));\
+ (v).c[22]= -cimag((u).c[1])*cimag((u).c[8])-cimag((u).c[2])*cimag((u).c[7])+creal((u).c[1])*creal((u).c[8])+creal((u).c[2])*creal((u).c[7])+I*(+cimag((u).c[1])*creal((u).c[8])+cimag((u).c[2])*creal((u).c[7])+cimag((u).c[7])*creal((u).c[2])+cimag((u).c[8])*creal((u).c[1]));\
+ (v).c[23]= +1.414213562373095e+00*(-cimag((u).c[2])*cimag((u).c[8])+creal((u).c[2])*creal((u).c[8]))+I*(+1.414213562373095e+00*(+cimag((u).c[2])*creal((u).c[8])+cimag((u).c[8])*creal((u).c[2])));\
+ (v).c[24]= +1.414213562373095e+00*(-cimag((u).c[3])*cimag((u).c[6])+creal((u).c[3])*creal((u).c[6]))+I*(+1.414213562373095e+00*(+cimag((u).c[3])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[3])));\
+ (v).c[25]= -cimag((u).c[3])*cimag((u).c[7])-cimag((u).c[4])*cimag((u).c[6])+creal((u).c[3])*creal((u).c[7])+creal((u).c[4])*creal((u).c[6])+I*(+cimag((u).c[3])*creal((u).c[7])+cimag((u).c[4])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[4])+cimag((u).c[7])*creal((u).c[3]));\
+ (v).c[26]= +1.414213562373095e+00*(-cimag((u).c[4])*cimag((u).c[7])+creal((u).c[4])*creal((u).c[7]))+I*(+1.414213562373095e+00*(+cimag((u).c[4])*creal((u).c[7])+cimag((u).c[7])*creal((u).c[4])));\
+ (v).c[27]= -cimag((u).c[3])*cimag((u).c[8])-cimag((u).c[5])*cimag((u).c[6])+creal((u).c[3])*creal((u).c[8])+creal((u).c[5])*creal((u).c[6])+I*(+cimag((u).c[3])*creal((u).c[8])+cimag((u).c[5])*creal((u).c[6])+cimag((u).c[6])*creal((u).c[5])+cimag((u).c[8])*creal((u).c[3]));\
+ (v).c[28]= -cimag((u).c[4])*cimag((u).c[8])-cimag((u).c[5])*cimag((u).c[7])+creal((u).c[4])*creal((u).c[8])+creal((u).c[5])*creal((u).c[7])+I*(+cimag((u).c[4])*creal((u).c[8])+cimag((u).c[5])*creal((u).c[7])+cimag((u).c[7])*creal((u).c[5])+cimag((u).c[8])*creal((u).c[4]));\
+ (v).c[29]= +1.414213562373095e+00*(-cimag((u).c[5])*cimag((u).c[8])+creal((u).c[5])*creal((u).c[8]))+I*(+1.414213562373095e+00*(+cimag((u).c[5])*creal((u).c[8])+cimag((u).c[8])*creal((u).c[5])));\
+ (v).c[30]= -cimag((u).c[6])*cimag((u).c[6])+creal((u).c[6])*creal((u).c[6])+I*(+2.000000000000000e+00*cimag((u).c[6])*creal((u).c[6]));\
+ (v).c[31]= +1.414213562373095e+00*(-cimag((u).c[6])*cimag((u).c[7])+creal((u).c[6])*creal((u).c[7]))+I*(+1.414213562373095e+00*(+cimag((u).c[6])*creal((u).c[7])+cimag((u).c[7])*creal((u).c[6])));\
+ (v).c[32]= -cimag((u).c[7])*cimag((u).c[7])+creal((u).c[7])*creal((u).c[7])+I*(+2.000000000000000e+00*cimag((u).c[7])*creal((u).c[7]));\
+ (v).c[33]= +1.414213562373095e+00*(-cimag((u).c[6])*cimag((u).c[8])+creal((u).c[6])*creal((u).c[8]))+I*(+1.414213562373095e+00*(+cimag((u).c[6])*creal((u).c[8])+cimag((u).c[8])*creal((u).c[6])));\
+ (v).c[34]= +1.414213562373095e+00*(-cimag((u).c[7])*cimag((u).c[8])+creal((u).c[7])*creal((u).c[8]))+I*(+1.414213562373095e+00*(+cimag((u).c[7])*creal((u).c[8])+cimag((u).c[8])*creal((u).c[7])));\
+ (v).c[35]= -cimag((u).c[8])*cimag((u).c[8])+creal((u).c[8])*creal((u).c[8])+I*(+2.000000000000000e+00*cimag((u).c[8])*creal((u).c[8]));\
+
+

@@ -343,11 +343,11 @@ int main(int argc, char *argv[]) {
 
   /* output version information */
   lprintf("MAIN", 0,
-          "SOMBRERO built from HiRep commit {{hirep_commit}}\n");
+          "SOMBRERO built from HiRep commit 022f909\n");
   lprintf("MAIN", 0,
-          "Base SOMBRERO commit {{sombrero_commit}}\n");
+          "Base SOMBRERO commit 31eb5fe\n");
   lprintf("MAIN", 0,
-          "SOMBRERO built using shoplifter commit {{shoplifter_commit}}\n");
+          "SOMBRERO built using shoplifter commit 2ed4c5e\n");
 
   /* set random number variables */
   input_rlx rlx_var;
