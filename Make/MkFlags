@@ -3,6 +3,6 @@
 # https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
 # If you are using Spack, leave these commented out
 # (Spack will manage them when building)
-# CC = mpicc
+# MPICC = mpicc
 # CFLAGS = -std=c99 -O3
 # LDFLAGS =
