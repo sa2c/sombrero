@@ -8,36 +8,54 @@ A benchmarking utility for high performance computing based on lattice field the
 
 ## Requirements
   
-  Requires an MPI library and compiler.
+Requires an MPI library and compiler.
 
 ## Set Up
 
-  1. Clone the repository
+1. Clone the repository
 
 ```
 git clone https://github.com/sa2c/sombrero.git
 cd sombrero
 ```
 
-  2. Edit `Make/MkFlags` to set the compiler, `CFLAGS` and linker flags
-  3. To compile run
+2. Edit `Make/MkFlags` to set the compiler, `CFLAGS` and linker flags
+3. To compile run
  
 ```
 make
 ```
 
+### Setup with Spack
+
+Install and configure the package `sombrero` 
+as you would do with a regular spack package.
+
 ## Usage
 
-To run all benchmarks use the `sombrero.sh` script
-
+To run all benchmarks use the `sombrero.sh` script:
+  
 ```
 ./sombrero.sh -n <num-cores>  [ -w ] [ -s small | medium | large | very_large ]
 ```
 
-By default this will run a medium scale problem using `<num-cores>` mpi ranks. The problem size independent of the number of processes. This is useful for strong scaling.
+By default this will run a medium scale problem using `<num-cores>` mpi ranks.
+The problem size independent of the number of processes. 
+This is useful for strong scaling.
 
 All output is printed to stdout and error messages to stderr.
 
+### Usage with Spack 
+
+When using spack, once sombrero has been installed,
+loading the `sombrero` package with `spack load sombrero`
+will make `sombrero.sh` available
+in the PATH environment variable,
+so one can use:
+
+```
+sombrero.sh -n <num-cores>  [ -w ] [ -s small | medium | large | very_large ]
+```
 
 ## Parameters
 
