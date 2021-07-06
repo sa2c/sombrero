@@ -61,13 +61,16 @@ while getopts 'n:H:s:whl:p:' opt ; do
     esac
 done
 
+# From https://stackoverflow.com/a/246128/3113564
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Run each of the benchmarks, copy output to stdout and the tempfile
-safe_run mpirun $nodes sombrero/sombrero1 $weak $size $partition | tee $tmpfile
-safe_run mpirun $nodes sombrero/sombrero2 $weak $size $partition -v result | tee -a $tmpfile
-safe_run mpirun $nodes sombrero/sombrero3 $weak $size $partition -v result | tee -a $tmpfile
-safe_run mpirun $nodes sombrero/sombrero4 $weak $size $partition -v result | tee -a $tmpfile
-safe_run mpirun $nodes sombrero/sombrero5 $weak $size $partition -v result | tee -a $tmpfile
-safe_run mpirun $nodes sombrero/sombrero6 $weak $size $partition -v result | tee -a $tmpfile 
+touch $tmpfile
+for i in {1..6}
+do 
+    safe_run mpirun $nodes \
+    $SCRIPT_DIR/sombrero/sombrero$i $weak $size $partition -v result |\
+    tee -a $tmpfile
+done
 
 # Calculate the sums of the timings and the flop counts
 time=$(grep RESULT $tmpfile | grep -v "Gflops/seconds" | awk '{s+=$7} END {print s}') 
