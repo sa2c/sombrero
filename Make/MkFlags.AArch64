@@ -1,6 +1,6 @@
 #Include this file at the end of MkFlags
 
 #Compiler
-CC = mpicc
+MPICC = mpicc
 
 CFLAGS = -std=c99 -O3
