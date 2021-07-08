@@ -179,3 +179,18 @@ The verbose mode will produce additional information:
 mpirun -n Np sombrero/sombrero3 -s medium -v verbose 
 ```
 
+In case SOMBRERO was installed with Spack,
+in order to run a specific benchmark separately
+one has to use the full path to the executable program.
+To do so, 
+once SOMBRERO is loaded by Spack with the command
+
+``` 
+spack load sombrero
+```
+
+one can run case 3 with
+
+``` 
+mpirun -n 2 $(which sombrero.sh | xargs dirname)/sombrero/sombrero3 -s small
+```
