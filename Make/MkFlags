@@ -1,4 +1,8 @@
 #Compiler
-CC = mpicc
-CFLAGS = -std=c99 -O3
-LDFLAGS =
+# Set these variables either here or in the environment. See
+# https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+# If you are using Spack, leave these commented out
+# (Spack will manage them when building)
+# MPICC = mpicc
+# CFLAGS = -std=c99 -O3
+# LDFLAGS =

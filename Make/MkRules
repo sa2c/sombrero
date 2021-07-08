@@ -126,37 +126,37 @@ $(COUNTERSFULLPATHS):
 sombrero/sombrero1: sombrero/su2/sombrero.o sombrero/su2/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_su2.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2 -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2 -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 sombrero/sombrero2: sombrero/su2adj/sombrero.o sombrero/su2adj/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_su2adj.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2adj -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su2adj -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 sombrero/sombrero3: sombrero/su3/sombrero.o sombrero/su3/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_su3.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3 -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3 -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 sombrero/sombrero4: sombrero/sp4/sombrero.o sombrero/sp4/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_sp4.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4 -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4 -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 sombrero/sombrero5: sombrero/su3sym/sombrero.o sombrero/su3sym/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_su3sym.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3sym -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_su3sym -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 sombrero/sombrero6: sombrero/sp4adj/sombrero.o sombrero/sp4adj/hmc_utils.o \
     $(TOPDIR)/LibHR/libhr_sp4adj.a $(COUNTERSFULLPATHS)
 	echo $(_col_link)Linking$(_col_norm) $(call _cfname,$@)... 
-	$(CC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4adj -lm \
+	$(MPICC) -o $@ $^ $(CFLAGS) -LLibHR -lhr_sp4adj -lm \
     -L$(COUNTERSLDIR) $(pathsub lib%.o, -l%, $(COUNTERS));
 
 
@@ -182,7 +182,7 @@ sombrero/sp4/%.o sombrero/sp4adj/%.o : sombrero/%.c $(RBLD)
 	else \
 		echo "$(_col_deps)Compiling$(_col_norm) $(call _cfname,$(call _rname,$(SRC)))..." ;\
 		mkdir -p $(dir $@) ;\
-		$(CC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
+		$(MPICC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
 	fi ;\
 	
 
@@ -199,7 +199,7 @@ sp4adj/%.o: %.c $(MKDIR)/MkFlags $(RBLD)
 		MAKEFILES="$(DEP)" $(MAKE) $@ ;\
 	else \
 		echo "$(_col_deps)Compiling$(_col_norm) $(call _cfname,$(call _rname,$(SRC)))..." ;\
-		$(CC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
+		$(MPICC) -o $@ -c $(CFLAGS) $(CPPFLAGS) $< ;\
 	fi ;\
 
 
