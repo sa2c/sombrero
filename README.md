@@ -10,7 +10,7 @@ A benchmarking utility for high performance computing based on lattice field the
   
 Requires an MPI library and compiler.
 
-## Set Up
+## Setup
 
 1. Clone the repository
 
