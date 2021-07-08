@@ -40,7 +40,7 @@ To run all benchmarks use the `sombrero.sh` script:
 ```
 
 By default this will run a medium scale problem using `<num-cores>` mpi ranks.
-The problem size independent of the number of processes. 
+The problem size is independent of the number of processes. 
 This is useful for strong scaling.
 
 All output is printed to stdout and error messages to stderr.
