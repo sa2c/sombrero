@@ -345,7 +345,7 @@ int main(int argc, char *argv[]) {
   lprintf("MAIN", 0,
           "SOMBRERO built from HiRep commit 022f909\n");
   lprintf("MAIN", 0,
-          "Base SOMBRERO commit 31eb5fe\n");
+          "Base SOMBRERO commit f4d4120\n");
   lprintf("MAIN", 0,
           "SOMBRERO built using shoplifter commit 2ed4c5e\n");
 
