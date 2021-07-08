@@ -29,7 +29,7 @@ make
 ### Setup with Spack
 
 Install and configure the package `sombrero` 
-as you would do with a regular spack package.
+as you would do with a regular Spack package.
 
 ## Usage
 
@@ -39,7 +39,7 @@ To run all benchmarks use the `sombrero.sh` script:
 ./sombrero.sh -n <num-cores>  [ -w ] [ -s small | medium | large | very_large ]
 ```
 
-By default this will run a medium scale problem using `<num-cores>` mpi ranks.
+By default this will run a medium scale problem using `<num-cores>` MPI ranks.
 The problem size is independent of the number of processes. 
 This is useful for strong scaling.
 
@@ -47,7 +47,7 @@ All output is printed to stdout and error messages to stderr.
 
 ### Usage with Spack 
 
-When using spack, once sombrero has been installed,
+When using Spack, once SOMBRERO has been installed,
 loading the `sombrero` package with `spack load sombrero`
 will make `sombrero.sh` available
 in the PATH environment variable,
@@ -60,7 +60,7 @@ sombrero.sh -n <num-cores>  [ -w ] [ -s small | medium | large | very_large ]
 ## Parameters
 
 `-n <num-cores>`: </br>
-&nbsp;&nbsp;&nbsp; Set the number of mpi ranks. SOMBRERO will attempt to divide the problem accross the ranks automatically. The number of ranks `num-cores` should be a power of 2, `num-cores = 2^n`. This can be multiplied by a factor of 3, `num-cores = 3 * 2^n`.
+&nbsp;&nbsp;&nbsp; Set the number of MPI ranks. SOMBRERO will attempt to divide the problem accross the ranks automatically. The number of ranks `num-cores` should be a power of 2, `num-cores = 2^n`. This can be multiplied by a factor of 3, `num-cores = 3 * 2^n`.
 
 `-s small | medium | large | very_large:`</br>
 &nbsp;&nbsp;&nbsp; Specify the problem size. Compatible with weak or strong scaling.
@@ -165,9 +165,9 @@ Additional parameters `-l` and `-p` exist for more precise control of the proble
 &nbsp;&nbsp;&nbsp; Set the lattice size in each direction. Replace each `N` with an integer larger or equal to 4.
 
 `-p NxNxNxN`:</br>
-&nbsp;&nbsp;&nbsp; Manually partition the lattice among the mpi ranks. The lattice is divided accross `N` ranks in each direction. A positive integer must be used.
+&nbsp;&nbsp;&nbsp; Manually partition the lattice among the MPI ranks. The lattice is divided accross `N` ranks in each direction. A positive integer must be used.
 
-Once compiled, binaries for individual test cases can be found in the sombrero folder. For example the case 3 can be run separately with
+Once compiled, binaries for individual test cases can be found in the `sombrero` folder. For example the case 3 can be run separately with
 
 ```
 mpirun -n Np sombrero/sombrero3 -s medium 
