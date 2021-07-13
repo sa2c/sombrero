@@ -60,7 +60,7 @@ int init_mc() {
   init_BCs(&BCs_pars);
 
   /* init gauge field */
-  unit_u(u_gauge);
+  random_u(u_gauge);
   
   apply_BCs_on_fundamental_gauge_field(); 
   represent_gauge_field();
