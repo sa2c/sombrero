@@ -423,7 +423,7 @@ int main(int argc, char *argv[]) {
     const float global_GB_used =
         cg_local_GB_used(real_iterations) * NP_T * NP_X * NP_Y * NP_Z;
 
-    lprintf("MAIN", 10, " Performed %d conjugate gradient iterations\n",
+    lprintf("MAIN", 0, " Performed %d conjugate gradient iterations\n",
             real_iterations);
     lprintf(
         "MAIN", 0,
