@@ -21,26 +21,23 @@
 #include "communications.h"
 #include <math.h>
 
-
-void unit_u(suNg_field *gf)
+void random_u(suNg_field *gf)
 {
-  suNg unity;
-
-  error(gf==NULL,1,"unit_u [random_fields.c]",
+  error(gf==NULL,1,"random_u [random_fields.c]",
 	"Attempt to access unallocated memory space");   
   
-   _suNg_unit(unity);
   _MASTER_FOR(gf->type,ix) {
     /* unroll 4 directions */
     suNg *ptr=(gf->ptr)+coord_to_index(ix,0);
-    *(ptr++)=unity;
-    *(ptr++)=unity;
-    *(ptr++)=unity;
-    *(ptr)=unity;
+    random_suNg(ptr++);
+    random_suNg(ptr++);
+    random_suNg(ptr++);
+    random_suNg(ptr);
   }
 
   start_gf_sendrecv(gf);
 
 }
+
 
 

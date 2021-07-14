@@ -22,7 +22,6 @@
 
 /*SUN exp matrix*/
 
-void ExpX(double dt, suNg_algebra_vector *h, suNg *u);
 
 
 typedef struct

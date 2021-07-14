@@ -122,6 +122,49 @@ static void error(int no)
       exit(0);
 }
 
+static void update(void)
+{
+      int k, kmax;
+      dble_vec_t *pmin, *pmax, *pi, *pj;
+
+      kmax = pr;
+      pmin = &x.vec[0];
+      pmax = pmin + 12;
+      pi = &x.vec[ir];
+      pj = &x.vec[jr];
+
+      __asm__ __volatile__("movaps %0, %%xmm0 \n\t"
+                           "movaps %1, %%xmm1 \n\t"
+                           "movaps %2, %%xmm2"
+                           :
+                           : "m"(one_bit),
+                             "m"(one),
+                             "m"(carry)
+                           : "xmm0", "xmm1", "xmm2");
+
+      for (k = 0; k < kmax; k++)
+      {
+            STEP(pi, pj);
+            pi += 1;
+            pj += 1;
+            if (pi == pmax)
+                  pi = pmin;
+            if (pj == pmax)
+                  pj = pmin;
+      }
+
+      __asm__ __volatile__("movaps %%xmm2, %0"
+                           : "=m"(carry));
+
+      ir += prm;
+      jr += prm;
+      if (ir >= 12)
+            ir -= 12;
+      if (jr >= 12)
+            jr -= 12;
+      is = 8 * ir;
+      is_old = is;
+}
 
 static void define_constants(void)
 {
@@ -212,6 +255,21 @@ void rlxd_init(int level, int seed)
       init = 1;
 }
 
+void ranlxd(double r[], int n)
+{
+      int k;
+
+      if (init == 0)
+            rlxd_init(1, 1);
+
+      for (k = 0; k < n; k++)
+      {
+            is = next[is];
+            if (is == is_old)
+                  update();
+            r[k] = (double)(x.num[is + 4]) + (double)(one_bit.c1 * x.num[is]);
+      }
+}
 
 
 
@@ -307,6 +365,37 @@ static void error(int no)
       exit(0);
 }
 
+static void update(void)
+{
+      int k, kmax, d;
+      dble_vec_t *pmin, *pmax, *pi, *pj;
+
+      kmax = pr;
+      pmin = &x.vec[0];
+      pmax = pmin + 12;
+      pi = &x.vec[ir];
+      pj = &x.vec[jr];
+
+      for (k = 0; k < kmax; k++)
+      {
+            STEP(pi, pj);
+            pi += 1;
+            pj += 1;
+            if (pi == pmax)
+                  pi = pmin;
+            if (pj == pmax)
+                  pj = pmin;
+      }
+
+      ir += prm;
+      jr += prm;
+      if (ir >= 12)
+            ir -= 12;
+      if (jr >= 12)
+            jr -= 12;
+      is = 8 * ir;
+      is_old = is;
+}
 
 static void define_constants(void)
 {
@@ -391,6 +480,21 @@ void rlxd_init(int level, int seed)
       init = 1;
 }
 
+void ranlxd(double r[], int n)
+{
+      int k;
+
+      if (init == 0)
+            rlxd_init(1, 1);
+
+      for (k = 0; k < n; k++)
+      {
+            is = next[is];
+            if (is == is_old)
+                  update();
+            r[k] = one_bit * ((double)(x.num[is + 4]) + one_bit * (double)(x.num[is]));
+      }
+}
 
 
 

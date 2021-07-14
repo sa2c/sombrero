@@ -66,6 +66,7 @@ void Dphi_eopre_4f_flt(double m0, spinor_field_flt *out, spinor_field_flt *in);
 void Dphi_eopre_4f_dagger_flt(double m0, spinor_field_flt *out, spinor_field_flt *in);
 void Dphieopre_4f_sq_flt(double m0, spinor_field_flt *out, spinor_field_flt *in);
 
+/* Dirac operators used in update */
 
 
 #endif

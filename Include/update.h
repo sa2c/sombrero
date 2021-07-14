@@ -14,6 +14,8 @@
 void test_staples();
 
 
+void update(double *beta, int nhb, int nor);
+void random_su2(double rho, double s[]);
 
 
 /* functions and structures for the MRE algorithm */

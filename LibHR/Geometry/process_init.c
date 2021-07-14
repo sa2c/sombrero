@@ -57,7 +57,7 @@ static int setup_level = 0;
 #endif
 #ifdef WITH_SMEARING
 #endif
-#if defined(WITH_CLOVER)|| defined(WITH_EXPCLOVER)
+#if defined(WITH_CLOVER) || defined(WITH_EXPCLOVER)
 #endif
 
 #ifdef WITH_MPI

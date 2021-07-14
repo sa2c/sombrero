@@ -37,6 +37,59 @@
  _complex_0((u).c[7]);\
 
 
+#define _suNg_expand(v,u)\
+ (v).c[0] = _complex_re((u).c[0]);\
+ (v).c[0]+= I*( _complex_im((u).c[0]));\
+ (v).c[10] = _complex_re((u).c[0]);\
+ (v).c[10]+= I*( -_complex_im((u).c[0]));\
+ (v).c[2] = _complex_re((u).c[2]);\
+ (v).c[2]+= I*( _complex_im((u).c[2]));\
+ (v).c[8] = -_complex_re((u).c[2]);\
+ (v).c[8]+= I*( _complex_im((u).c[2]));\
+ (v).c[1] = _complex_re((u).c[1]);\
+ (v).c[1]+= I*( _complex_im((u).c[1]));\
+ (v).c[11] = _complex_re((u).c[1]);\
+ (v).c[11]+= I*( -_complex_im((u).c[1]));\
+ (v).c[3] = _complex_re((u).c[3]);\
+ (v).c[3]+= I*( _complex_im((u).c[3]));\
+ (v).c[9] = -_complex_re((u).c[3]);\
+ (v).c[9]+= I*( _complex_im((u).c[3]));\
+ (v).c[4] = _complex_re((u).c[4]);\
+ (v).c[4]+= I*( _complex_im((u).c[4]));\
+ (v).c[14] = _complex_re((u).c[4]);\
+ (v).c[14]+= I*( -_complex_im((u).c[4]));\
+ (v).c[6] = _complex_re((u).c[6]);\
+ (v).c[6]+= I*( _complex_im((u).c[6]));\
+ (v).c[12] = -_complex_re((u).c[6]);\
+ (v).c[12]+= I*( _complex_im((u).c[6]));\
+ (v).c[5] = _complex_re((u).c[5]);\
+ (v).c[5]+= I*( _complex_im((u).c[5]));\
+ (v).c[15] = _complex_re((u).c[5]);\
+ (v).c[15]+= I*( -_complex_im((u).c[5]));\
+ (v).c[7] = _complex_re((u).c[7]);\
+ (v).c[7]+= I*( _complex_im((u).c[7]));\
+ (v).c[13] = -_complex_re((u).c[7]);\
+ (v).c[13]+= I*( _complex_im((u).c[7]));\
+
+
+#define _suNgfull_unit(u)\
+ _complex_1((u).c[0]);\
+ _complex_0((u).c[1]);\
+ _complex_0((u).c[2]);\
+ _complex_0((u).c[3]);\
+ _complex_0((u).c[4]);\
+ _complex_1((u).c[5]);\
+ _complex_0((u).c[6]);\
+ _complex_0((u).c[7]);\
+ _complex_0((u).c[8]);\
+ _complex_0((u).c[9]);\
+ _complex_1((u).c[10]);\
+ _complex_0((u).c[11]);\
+ _complex_0((u).c[12]);\
+ _complex_0((u).c[13]);\
+ _complex_0((u).c[14]);\
+ _complex_1((u).c[15])
+
 #define _vector_zero_f(r)\
  do { int _i;\
 for (_i=0;\

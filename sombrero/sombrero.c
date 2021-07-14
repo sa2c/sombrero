@@ -343,11 +343,11 @@ int main(int argc, char *argv[]) {
 
   /* output version information */
   lprintf("MAIN", 0,
-          "SOMBRERO built from HiRep commit 022f909\n");
+          "SOMBRERO built from HiRep commit 6c436a2\n");
   lprintf("MAIN", 0,
-          "Base SOMBRERO commit f4d4120\n");
+          "Base SOMBRERO commit f9ef8a1\n");
   lprintf("MAIN", 0,
-          "SOMBRERO built using shoplifter commit 2ed4c5e\n");
+          "SOMBRERO built using shoplifter commit 7aaec76\n");
 
   /* set random number variables */
   input_rlx rlx_var;
@@ -423,7 +423,7 @@ int main(int argc, char *argv[]) {
     const float global_GB_used =
         cg_local_GB_used(real_iterations) * NP_T * NP_X * NP_Y * NP_Z;
 
-    lprintf("MAIN", 10, " Performed %d conjugate gradient iterations\n",
+    lprintf("MAIN", 0, " Performed %d conjugate gradient iterations\n",
             real_iterations);
     lprintf(
         "MAIN", 0,

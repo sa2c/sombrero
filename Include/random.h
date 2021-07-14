@@ -22,8 +22,9 @@
 
 void random_suNg_unit_vector(suNg_vector *v);
 
+void random_suNg(suNg *u);
 
-void unit_u(suNg_field *gf);
+void random_u(suNg_field *gf);
 
 
 
