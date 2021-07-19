@@ -31,6 +31,11 @@
 #include "counters/flop_count.h"
 #include "counters/memory_count.h"
 
+#if defined __SSE3__ && defined __GNUC__
+#include <pmmintrin.h>
+#include <xmmintrin.h>
+#endif
+
 static int cg_test(spinor_field *in, spinor_field *out, int iterations);
 int init_mc();
 int end_mc();
@@ -277,7 +282,8 @@ static void read_cmdline_sombrero(int argc, char *argv[]) {
 
       /* local size 64^3 = */
       error(n_nodes < 4, 1, "main [sombrero.c]",
-            "A minimum of 4 MPI ranks is required for weak scaling with very_large "
+            "A minimum of 4 MPI ranks is required for weak scaling with "
+            "very_large "
             "local volume. Try -w small or increase the number of nodes\n");
       x[0] = n_nodes;
       x[1] = 64;
@@ -336,16 +342,18 @@ static void read_cmdline_sombrero(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+#if defined __SSE3__ && defined __GNUC__
+  _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+  _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+#endif
   /* setup process communications */
   setup_process_sombrero(&argc, &argv);
 
   read_cmdline_sombrero(argc, argv);
 
   /* output version information */
-  lprintf("MAIN", 0,
-          "SOMBRERO built from HiRep commit {{hirep_commit}}\n");
-  lprintf("MAIN", 0,
-          "Base SOMBRERO commit {{sombrero_commit}}\n");
+  lprintf("MAIN", 0, "SOMBRERO built from HiRep commit {{hirep_commit}}\n");
+  lprintf("MAIN", 0, "Base SOMBRERO commit {{sombrero_commit}}\n");
   lprintf("MAIN", 0,
           "SOMBRERO built using shoplifter commit {{shoplifter_commit}}\n");
 
