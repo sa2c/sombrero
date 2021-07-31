@@ -70,10 +70,14 @@ safe_run mpirun $nodes sombrero/sombrero5 $weak $size $partition -v result | tee
 safe_run mpirun $nodes sombrero/sombrero6 $weak $size $partition -v result | tee -a $tmpfile 
 
 # Calculate the sums of the timings and the flop counts
-time=$(grep RESULT $tmpfile | grep -v "Gflops/seconds" | awk '{s+=$7} END {print s}') 
-Gflops=$(grep RESULT $tmpfile | grep -v "Gflops/seconds" | awk '{s+=$4} END {print s}') 
-echo [RESULT] SUM $Gflops Gflops in $time seconds &&
-echo [RESULT] SUM $(echo $Gflops/$time | bc ) Gflops/seconds
+grep RESULT $tmpfile | grep -v "Gflops/seconds" | \
+    awk '{
+      time+=$7; 
+      Gflops+=$4;}
+      END { 
+      printf("[RESULT] SUM %.2f Gflops in %.2f seconds\n", Gflops, time);
+      printf("[RESULT] SUM %.2f Gflops/seconds\n", Gflops/ time);
+  }'
 
 
 
