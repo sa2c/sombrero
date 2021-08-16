@@ -353,7 +353,7 @@ int main(int argc, char *argv[]) {
 
   /* output version information */
   lprintf("MAIN", 0, "SOMBRERO built from HiRep commit 6c436a2\n");
-  lprintf("MAIN", 0, "Base SOMBRERO commit 57ea744\n");
+  lprintf("MAIN", 0, "Base SOMBRERO commit 093dec4\n");
   lprintf("MAIN", 0,
           "SOMBRERO built using shoplifter commit 7aaec76\n");
 
